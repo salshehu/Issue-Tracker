@@ -13,7 +13,8 @@ export async function POST(request: NextRequest) {
   const issue = await request.json();
   const checkvalid = createIssueschema.safeParse(issue);
 
-  if (!checkvalid) return NextResponse.json(checkvalid, { status: 400 });
+  if (!checkvalid.success)
+    return NextResponse.json("invalid entry, try again", { status: 400 });
 
   const newissue = await prisma.issue.create({
     data: {
