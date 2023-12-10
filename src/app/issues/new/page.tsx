@@ -10,6 +10,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueschema } from "@/lib/schemaValidation";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 
 // interface IssueForm {
 //   title: string;
@@ -20,6 +21,8 @@ type IssueForm = z.infer<typeof createIssueschema>;
 
 const NewIssue = () => {
   const route = useRouter();
+  const [error, setError] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const {
     register,
     control,
@@ -29,25 +32,24 @@ const NewIssue = () => {
     resolver: zodResolver(createIssueschema),
   });
 
-  const [error, setError] = useState("");
+  const submitForm = handleSubmit(async (data) => {
+    try {
+      setIsSending(true);
+      const res = await fetch("/api/issues", {
+        method: "POST",
+        headers: { "Content-Type": "Application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw "entries are invalid";
+      route.push("/issues");
+    } catch (err) {
+      setIsSending(false);
+      setError(`Something went wrong, ${err}`);
+    }
+  });
 
   return (
-    <form
-      className="p-5 space-y-3"
-      onSubmit={handleSubmit(async (data) => {
-        try {
-          const res = await fetch("/api/issues", {
-            method: "POST",
-            headers: { "Content-Type": "Application/json" },
-            body: JSON.stringify(data),
-          });
-          if (!res.ok) throw "entries are invalid";
-          route.push("/issues");
-        } catch (err) {
-          setError(`Something went wrong, ${err}`);
-        }
-      })}
-    >
+    <form className="p-5 space-y-3" onSubmit={submitForm}>
       <TextField.Root className="max-w-xl ">
         <TextField.Input placeholder="Title..." {...register("title")} />
       </TextField.Root>
@@ -62,7 +64,9 @@ const NewIssue = () => {
 
       <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-      <Button>Submit New Issue</Button>
+      <Button disabled={isSending}>
+        {isSending ? <Spinner /> : "Submit New Issue"}
+      </Button>
     </form>
   );
 };
