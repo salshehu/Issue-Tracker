@@ -10,6 +10,8 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClientSingleTon | undefined;
 };
 
-export const prisma = globalForPrisma.prisma ?? prismaClientSingleTon();
+const prisma = globalForPrisma.prisma ?? prismaClientSingleTon();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
+export default prisma;
