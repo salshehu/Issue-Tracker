@@ -9,6 +9,7 @@ import { AiFillWarning } from "react-icons/ai";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createIssueschema } from "@/lib/schemaValidation";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 // interface IssueForm {
 //   title: string;
@@ -47,22 +48,10 @@ const NewIssue = () => {
         }
       })}
     >
-      {error && (
-        <Callout.Root color="red">
-          <Callout.Icon>
-            <AiFillWarning />
-          </Callout.Icon>
-          <Callout.Text>{error}</Callout.Text>
-        </Callout.Root>
-      )}
       <TextField.Root className="max-w-xl ">
         <TextField.Input placeholder="Title..." {...register("title")} />
       </TextField.Root>
-      {errors.title && (
-        <Text color="red" as="p">
-          {errors.title.message}
-        </Text>
-      )}
+      {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
       <Controller
         name="description"
         control={control}
@@ -71,9 +60,7 @@ const NewIssue = () => {
         )}
       />
       {errors.description && (
-        <Text color="red" as="p">
-          {errors.description.message}
-        </Text>
+        <ErrorMessage>{errors.description.message}</ErrorMessage>
       )}
 
       <Button>Submit New Issue</Button>
