@@ -51,7 +51,7 @@ const NewIssue = () => {
       <TextField.Root className="max-w-xl ">
         <TextField.Input placeholder="Title..." {...register("title")} />
       </TextField.Root>
-      {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
+      <ErrorMessage>{errors.title?.message}</ErrorMessage>
       <Controller
         name="description"
         control={control}
@@ -59,9 +59,8 @@ const NewIssue = () => {
           <SimpleMde placeholder="Description..." {...field} />
         )}
       />
-      {errors.description && (
-        <ErrorMessage>{errors.description.message}</ErrorMessage>
-      )}
+
+      <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
       <Button>Submit New Issue</Button>
     </form>

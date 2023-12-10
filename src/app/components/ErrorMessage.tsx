@@ -3,6 +3,8 @@ import { Callout, Text } from "@radix-ui/themes";
 import { AiFillWarning } from "react-icons/ai";
 
 const ErrorMessage = ({ children }: PropsWithChildren) => {
+  if (!children) return null;
+
   return (
     <p>
       <Callout.Root color="red">
