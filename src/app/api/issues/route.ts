@@ -4,8 +4,8 @@ import { z } from "zod";
 import prisma from "../../../../prisma/client";
 
 const createIssueschema = z.object({
-  title: z.string().min(3).max(255),
-  description: z.string().min(1),
+  title: z.string().min(3, "Title is required").max(255),
+  description: z.string().min(1, "description can not be empty"),
 });
 
 // POST fn to create new issue:
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   const checkvalid = createIssueschema.safeParse(issue);
 
   if (!checkvalid.success)
-    return NextResponse.json("invalid entry, try again", { status: 400 });
+    return NextResponse.json(checkvalid.error.errors, { status: 400 });
 
   const newissue = await prisma.issue.create({
     data: {
