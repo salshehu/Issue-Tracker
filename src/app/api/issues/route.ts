@@ -1,12 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
 import prisma from "../../../../prisma/client";
-
-const createIssueschema = z.object({
-  title: z.string().min(3, "Title is required").max(255),
-  description: z.string().min(1, "description can not be empty"),
-});
+import { createIssueschema } from "../../../lib/schemaValidation";
 
 // POST fn to create new issue:
 export async function POST(request: NextRequest) {
