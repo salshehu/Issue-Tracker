@@ -10,6 +10,7 @@ import {
 } from "@radix-ui/themes";
 import Link from "next/link";
 import prisma from "../../../prisma/client";
+import IssueStatusBadge from "../components/IssueStatusBadge";
 
 const Issues = async () => {
   const issues = await prisma.issue.findMany();
@@ -40,10 +41,12 @@ const Issues = async () => {
               <TableRow key={issue.id}>
                 <TableCell>
                   {issue.title}{" "}
-                  <div className="block md:hidden">{issue.status}</div>
+                  <div className="block md:hidden">
+                    <IssueStatusBadge status={issue.status} />
+                  </div>
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
-                  {issue.status}
+                  <IssueStatusBadge status={issue.status} />
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   {issue.createdAt.toDateString()}
