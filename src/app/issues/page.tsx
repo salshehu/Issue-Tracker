@@ -11,18 +11,14 @@ import {
 import Link from "next/link";
 import prisma from "../../../prisma/client";
 import IssueStatusBadge from "../components/IssueStatusBadge";
+import IssuesTopBar from "./IssuesTopBar";
 
 const Issues = async () => {
   const issues = await prisma.issue.findMany();
 
   return (
     <div className="m-auto p-5 ">
-      <div className="flex flex-row justify-between mb-3">
-        <h2 className="  ">Issue List</h2>
-        <Button>
-          <Link href="/issues/new">Add New</Link>
-        </Button>
-      </div>
+      <IssuesTopBar />
       <div>
         <Table.Root variant="surface">
           <TableHeader>
