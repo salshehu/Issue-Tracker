@@ -24,6 +24,7 @@ const Issues = async () => {
         <Table.Root variant="surface">
           <TableHeader>
             <TableRow>
+              <TableColumnHeaderCell>Id</TableColumnHeaderCell>
               <TableColumnHeaderCell>Issue</TableColumnHeaderCell>
               <TableColumnHeaderCell className="hidden md:table-cell">
                 Status
@@ -36,6 +37,7 @@ const Issues = async () => {
           <TableBody>
             {issues.map((issue) => (
               <TableRow key={issue.id}>
+                <TableCell>{issue.id}</TableCell>
                 <TableCell>
                   <LinkComp href={`/issues/${issue.id}`}>
                     {issue.title}{" "}

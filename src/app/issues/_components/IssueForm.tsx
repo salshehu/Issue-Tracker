@@ -40,12 +40,24 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const submitForm = handleSubmit(async (data) => {
     try {
       setIsSending(true);
-      const res = await fetch("/api/issues", {
-        method: "POST",
-        headers: { "Content-Type": "Application/json" },
-        body: JSON.stringify(data),
-      });
+      let res;
+
+      if (issue) {
+        res = await fetch("/api/issues/" + issue.id, {
+          method: "PATCH",
+          headers: { "Content-Type": "Application/json" },
+          body: JSON.stringify(data),
+        });
+      } else {
+        res = await fetch("/api/issues", {
+          method: "POST",
+          headers: { "Content-Type": "Application/json" },
+          body: JSON.stringify(data),
+        });
+      }
+
       if (!res.ok) throw "entries are invalid";
+
       route.push("/issues");
     } catch (err) {
       setIsSending(false);
@@ -75,7 +87,8 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
       <Button disabled={isSending}>
-        {isSending ? <Spinner /> : "Submit New Issue"}
+        {issue ? "Update Issue" : "Submit New Issue"}
+        {isSending && <Spinner />}
       </Button>
     </form>
   );
