@@ -1,13 +1,11 @@
 import {
   Table,
-  TableHeader,
-  TableRow,
-  TableColumnHeaderCell,
   TableBody,
   TableCell,
+  TableColumnHeaderCell,
+  TableHeader,
+  TableRow,
 } from "@radix-ui/themes";
-import React from "react";
-import IssueStatusBadge from "../components/IssueStatusBadge";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import IssuesTopBar from "./IssuesTopBar";
