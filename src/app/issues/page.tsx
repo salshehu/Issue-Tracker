@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import prisma from "../../../prisma/client";
 import IssueStatusBadge from "../components/IssueStatusBadge";
-import IssuesTopBar from "./IssuesTopBar";
+import IssuesTopBar from "./_components/IssuesTopBar";
 import { LinkComp } from "../components";
 
 const Issues = async () => {

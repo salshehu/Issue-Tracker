@@ -1,17 +1,13 @@
 import React from "react";
 import prisma from "../../../../prisma/client";
 import { notFound } from "next/navigation";
-import { Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
-import IssueStatusBadge from "@/app/components/IssueStatusBadge";
-import { BsPencil, BsTrash } from "react-icons/bs";
-import { LinkComp } from "@/app/components";
+import { Badge, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import EditDeleteBtn from "@/app/components/EditDeleteBtn";
+import { BsPencil, BsTrash } from "react-icons/bs";
+import { Issue } from "@prisma/client";
+import { IssueStatusBadge } from "@/app/components";
 
-interface Props {
-  params: { id: string };
-}
-
-const IssueDetailPage = async ({ params }: Props) => {
+const IssueDetailsPage = async ({ params }: { params: { id: string } }) => {
   const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
@@ -19,37 +15,41 @@ const IssueDetailPage = async ({ params }: Props) => {
   if (!issue) notFound();
 
   return (
-    <div className="p-5  max-w-2xl space-y-1">
-      <Card className="relative">
-        <Flex gap={"4"} className="space-x-3 justify-between" my={"1"}>
-          <Heading>{issue?.title}</Heading>
-
-          <Flex className=" items-center ">
-            <small className="pr-2">Status &gt;</small>
+    <div>
+      <Card className="max-w-2xl p5">
+        <Flex className=" justify-between relative ">
+          <Heading>{issue.title}</Heading>
+          <Flex gap={"2"}>
+            <span>Status &gt;</span>
             <IssueStatusBadge status={issue.status} />
           </Flex>
         </Flex>
         <small>{issue.createdAt.toDateString()}</small>
-        <Text as="div">{issue?.description}</Text>
-        <div className="flex absolute right-1 bottom-1 gap-2">
-          <EditDeleteBtn
-            href={`/issues/${issue.id}/edit`}
-            size="1"
-            color="violet"
-            icon={<BsPencil />}
-            text="Edit"
-          />
-          <EditDeleteBtn
-            href={`/issues/${issue.id}/delete`}
-            size="1"
-            color="green"
-            icon={<BsTrash />}
-            text="Delete"
-          />
+        <div className=" space-x-2 ">
+          <Text as="div" className="mb-7">
+            {issue.description}
+          </Text>
+          <div className="absolute right-2 bottom-2">
+            <Flex gap={"3"}>
+              <EditDeleteBtn
+                href={`/issues/${issue.id}/edit`}
+                text="Edit"
+                icon={<BsPencil />}
+                size="1"
+              />
+              <EditDeleteBtn
+                href={`/issues/${issue.id}/delete`}
+                icon={<BsTrash />}
+                text="Delete"
+                color="red"
+                size="1"
+              />
+            </Flex>
+          </div>
         </div>
       </Card>
     </div>
   );
 };
 
-export default IssueDetailPage;
+export default IssueDetailsPage;
