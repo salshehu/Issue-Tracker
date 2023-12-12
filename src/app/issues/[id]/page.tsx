@@ -3,7 +3,9 @@ import prisma from "../../../../prisma/client";
 import { notFound } from "next/navigation";
 import { Button, Card, Flex, Heading, Text } from "@radix-ui/themes";
 import IssueStatusBadge from "@/app/components/IssueStatusBadge";
-import { BsPencil } from "react-icons/bs";
+import { BsPencil, BsTrash } from "react-icons/bs";
+import { LinkComp } from "@/app/components";
+import EditDeleteBtn from "@/app/components/EditDeleteBtn";
 
 interface Props {
   params: { id: string };
@@ -29,10 +31,22 @@ const IssueDetailPage = async ({ params }: Props) => {
         </Flex>
         <small>{issue.createdAt.toDateString()}</small>
         <Text as="div">{issue?.description}</Text>
-        <Button size={"1"} className="absolute right-1 bottom-1">
-          <BsPencil />
-          Edit
-        </Button>
+        <div className="flex absolute right-1 bottom-1 gap-2">
+          <EditDeleteBtn
+            href={`/issues/${issue.id}/edit`}
+            size="1"
+            color="violet"
+            icon={<BsPencil />}
+            text="Edit"
+          />
+          <EditDeleteBtn
+            href={`/issues/${issue.id}/delete`}
+            size="1"
+            color="green"
+            icon={<BsTrash />}
+            text="Delete"
+          />
+        </div>
       </Card>
     </div>
   );
