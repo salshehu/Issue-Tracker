@@ -16,7 +16,7 @@ const IssueDetailsPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div>
-      <Card className="max-w-2xl p5">
+      <Card className="max-w-2xl">
         <Flex className=" justify-between relative ">
           <Heading>{issue.title}</Heading>
           <Flex gap={"2"}>

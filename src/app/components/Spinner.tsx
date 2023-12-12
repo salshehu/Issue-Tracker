@@ -1,9 +1,9 @@
 import React from "react";
 
-const Spinner = () => {
+const Spinner = ({ text }: { text: string }) => {
   return (
     <div>
-      <span>Submitting...</span>
+      <span className="mr-2">{text}</span>
       <div
         className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
         role="status"

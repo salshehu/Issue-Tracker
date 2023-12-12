@@ -59,6 +59,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       if (!res.ok) throw "entries are invalid";
 
       route.push("/issues");
+      route.refresh();
     } catch (err) {
       setIsSending(false);
       setError(`Something went wrong, ${err}`);
@@ -67,7 +68,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   return (
     <form className="max-w-2xl p-5 space-y-3" onSubmit={submitForm}>
-      <TextField.Root className="max-w-xl ">
+      <TextField.Root>
         <TextField.Input
           defaultValue={issue?.title}
           placeholder="Title..."
@@ -87,8 +88,8 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
       <Button disabled={isSending}>
-        {issue ? "Update Issue" : "Submit New Issue"}
-        {isSending && <Spinner />}
+        {issue ? "Update Issue" : "Submit Issue"}
+        {isSending && <Spinner text={issue ? "Updating" : "Submitting"} />}
       </Button>
     </form>
   );
