@@ -1,16 +1,20 @@
 "use client";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
-import SimpleMde from "react-simplemde-editor";
-import { useForm, Controller } from "react-hook-form";
-import "easymde/dist/easymde.min.css";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { AiFillWarning } from "react-icons/ai";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { createIssueschema } from "@/lib/schemaValidation";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
+import { createIssueschema } from "@/lib/schemaValidation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button, TextField } from "@radix-ui/themes";
+import "easymde/dist/easymde.min.css";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
+
+// dynamic fn to laxy load component giving error by disabling SSR on the comp.
+const SimpleMde = dynamic(() => import("react-simplemde-editor"), {
+  ssr: false,
+});
 
 // interface IssueForm {
 //   title: string;
