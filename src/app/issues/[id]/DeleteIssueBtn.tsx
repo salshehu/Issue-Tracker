@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/app/components";
 import EditDeleteBtn from "@/app/components/EditDeleteBtn";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { ALL } from "dns";
@@ -11,9 +12,11 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
   const router = useRouter();
 
   const [err, setErr] = useState(false);
+  const [isDeleting, setisDeleting] = useState(false);
 
   const deleteHandler = async () => {
     try {
+      setisDeleting(true);
       const res = await fetch(`/api/issues/${id}`, {
         method: "DELETE",
       });
@@ -22,6 +25,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
       router.refresh();
     } catch (error) {
       setErr(true);
+      setisDeleting(false);
     }
   };
 
@@ -35,9 +39,10 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
           icon={<BsTrash />}
           clickHandler={clickHandler}
         /> */}
-          <Button color="red" variant="surface">
-            <BsTrash />
-            Delete Issue
+          <Button color="red" variant="surface" disabled={isDeleting}>
+            {!isDeleting && <BsTrash />}
+            {!isDeleting && "Delete Issue"}
+            {isDeleting && <Spinner text="Deleting issue" />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
