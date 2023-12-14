@@ -26,10 +26,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.variable}>
         <Theme appearance="light" accentColor="violet" radius="large">
-          <NavBar />
-          <main className="m-2">
-            <Container>{children}</Container>
-          </main>
+          <Container className="mx-2">
+            <NavBar />
+            <main>{children}</main>
+          </Container>
         </Theme>
       </body>
     </html>

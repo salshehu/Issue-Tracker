@@ -6,10 +6,30 @@ import { BsPencil } from "react-icons/bs";
 import prisma from "../../../../../prisma/client";
 import DeleteIssueBtn from "./DeleteIssueBtn";
 
-const IssueDetailsPage = async ({ params }: { params: { id: string } }) => {
+interface Props {
+  params: { id: string };
+}
+
+async function getIssue({ id }: { id: string }) {
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id: parseInt(id) },
   });
+
+  if (!issue) throw new Error();
+
+  return issue;
+}
+
+export async function generateMetadata({ params }: Props) {
+  const mdata = await getIssue(params);
+  return {
+    title: mdata.title,
+    description: mdata.description,
+  };
+}
+
+const IssueDetailsPage = async ({ params }: Props) => {
+  const issue = await getIssue(params);
 
   if (!issue) notFound();
 

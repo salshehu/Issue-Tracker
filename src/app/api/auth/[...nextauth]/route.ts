@@ -3,8 +3,11 @@ import AppleProvider from "next-auth/providers/apple";
 import FacebookProvider from "next-auth/providers/facebook";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import prisma from "../../../../../prisma/client";
 
 const handler = NextAuth({
+  adapter: PrismaAdapter(prisma),
   providers: [
     // OAuth authentication providers...
     AppleProvider({
@@ -25,6 +28,9 @@ const handler = NextAuth({
       from: "NextAuth.js <no-reply@example.com>",
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
 });
 
 export { handler as GET, handler as POST };
