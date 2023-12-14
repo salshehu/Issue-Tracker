@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "../../../../prisma/client";
-import { Issueschema } from "../../../lib/schemaValidation";
+import { Issueschema } from "../../../_lib/schemaValidation";
 
 // POST fn to create new issue:
 export async function POST(request: NextRequest) {

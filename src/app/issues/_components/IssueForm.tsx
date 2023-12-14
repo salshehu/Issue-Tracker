@@ -1,7 +1,7 @@
 "use client";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import Spinner from "@/app/components/Spinner";
-import { Issueschema } from "@/lib/schemaValidation";
+import ErrorMessage from "@/_components/ErrorMessage";
+import Spinner from "@/_components/Spinner";
+import { Issueschema } from "@/_lib/schemaValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Issue } from "@prisma/client";
 import { Button, TextField } from "@radix-ui/themes";
@@ -56,9 +56,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         });
       }
 
-      if (!res.ok) throw "entries are invalid";
+      if (!res.ok) return new Error("entries are invalid");
 
-      route.push("/issues");
+      route.push("/issues/lists");
       route.refresh();
     } catch (err) {
       setIsSending(false);
@@ -88,8 +88,13 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
       <Button disabled={isSending}>
-        {issue ? "Update Issue" : "Submit Issue"}
-        {isSending && <Spinner text={issue ? "Updating" : "Submitting"} />}
+        {isSending ? (
+          <Spinner text={issue ? "Updating..." : "Submitting..."} />
+        ) : issue ? (
+          "Update Issue"
+        ) : (
+          "Submit Issue"
+        )}
       </Button>
     </form>
   );

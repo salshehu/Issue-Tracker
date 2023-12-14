@@ -1,12 +1,10 @@
-import { IssueStatusBadge, LinkComp } from "@/app/components";
-import EditDeleteBtn from "@/app/components/EditDeleteBtn";
+import { IssueStatusBadge, LinkComp } from "@/_components";
+import EditDeleteBtn from "@/_components/EditDeleteBtn";
 import { Box, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-import { BsPencil, BsSave, BsTrash } from "react-icons/bs";
-import prisma from "../../../../prisma/client";
+import { BsPencil } from "react-icons/bs";
+import prisma from "../../../../../prisma/client";
 import DeleteIssueBtn from "./DeleteIssueBtn";
-import { useState } from "react";
-import Link from "next/link";
 
 const IssueDetailsPage = async ({ params }: { params: { id: string } }) => {
   const issue = await prisma.issue.findUnique({
@@ -40,7 +38,7 @@ const IssueDetailsPage = async ({ params }: { params: { id: string } }) => {
           gap={"3"}
           className="flex-row justify-end md:flex-col  mx-3 mt-3 "
         >
-          <LinkComp href={`/issues/${issue.id}/edit`}>
+          <LinkComp href={`/issues/lists/${issue.id}/edit`}>
             <EditDeleteBtn text="Edit Issue" icon={<BsPencil />} />
           </LinkComp>
 

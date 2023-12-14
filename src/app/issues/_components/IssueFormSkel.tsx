@@ -1,5 +1,5 @@
 import { Box } from "@radix-ui/themes";
-import { Skeleton } from "../../components";
+import { Skeleton } from "../../../_components";
 
 const LoadingFormSkeleton = () => {
   return (

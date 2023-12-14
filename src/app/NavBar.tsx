@@ -9,9 +9,10 @@ const NavBar = () => {
   const path = usePathname();
 
   const links = [
-    { id: 1, label: "Dashboard", href: "/" },
-    { id: 2, label: "Issues", href: "/issues" },
-    { id: 3, label: "Audit", href: "/audit" },
+    { id: 1, label: "Home", href: "/" },
+    { id: 2, label: "Dashboard", href: "/dashboard" },
+    { id: 3, label: "Issues", href: "/issues/lists" },
+    { id: 4, label: "About", href: "/info" },
   ];
 
   return (

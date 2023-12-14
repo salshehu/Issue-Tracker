@@ -1,11 +1,9 @@
 "use client";
 
-import { Spinner } from "@/app/components";
-import EditDeleteBtn from "@/app/components/EditDeleteBtn";
+import { Spinner } from "@/_components";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
-import { ALL } from "dns";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 import { BsTrash } from "react-icons/bs";
 
 const DeleteIssueBtn = ({ id }: { id: number }) => {
@@ -21,7 +19,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
         method: "DELETE",
       });
       if (!res.ok) return setErr(true);
-      router.push("/issues");
+      router.push("/issues/lists");
       router.refresh();
     } catch (error) {
       setErr(true);
@@ -84,7 +82,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
               <Button
                 color="red"
                 variant="surface"
-                onClick={() => router.push("/issues")}
+                onClick={() => router.push("/issues/lists")}
               >
                 Cancel
               </Button>

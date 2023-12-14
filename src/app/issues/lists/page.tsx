@@ -1,6 +1,4 @@
-import React from "react";
 import {
-  Button,
   Table,
   TableBody,
   TableCell,
@@ -8,11 +6,10 @@ import {
   TableHeader,
   TableRow,
 } from "@radix-ui/themes";
-import Link from "next/link";
-import prisma from "../../../prisma/client";
-import IssueStatusBadge from "../components/IssueStatusBadge";
-import IssuesTopBar from "./_components/IssuesTopBar";
-import { LinkComp } from "../components";
+import prisma from "../../../../prisma/client";
+import { LinkComp } from "../../../_components";
+import IssueStatusBadge from "../../../_components/IssueStatusBadge";
+import IssuesTopBar from "../_components/IssuesTopBar";
 
 const Issues = async () => {
   const issues = await prisma.issue.findMany();
@@ -39,7 +36,7 @@ const Issues = async () => {
               <TableRow key={issue.id}>
                 <TableCell>{issue.id}</TableCell>
                 <TableCell>
-                  <LinkComp href={`/issues/${issue.id}`}>
+                  <LinkComp href={`/issues/lists/${issue.id}`}>
                     {issue.title}{" "}
                     <div className="block md:hidden">
                       <IssueStatusBadge status={issue.status} />

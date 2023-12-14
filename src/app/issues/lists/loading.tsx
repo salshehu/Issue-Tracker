@@ -6,8 +6,8 @@ import {
   TableHeader,
   TableRow,
 } from "@radix-ui/themes";
-import { Skeleton } from "../components";
-import IssuesTopBar from "./_components/IssuesTopBar";
+import { Skeleton } from "../../../_components";
+import IssuesTopBar from "../_components/IssuesTopBar";
 
 const LoadingIssueSkel = () => {
   const issues = [1, 2, 3, 4, 5, 6, 7];
