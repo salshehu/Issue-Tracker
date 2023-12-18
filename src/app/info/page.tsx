@@ -2,7 +2,7 @@ import React from "react";
 
 const AboutPage = () => {
   return (
-    <div>
+    <div className="h-screen  grid">
       About page{" "}
       <p>
         Lorem ipsum dolor, sit amet consectetur adipisicing elit. Illo atque
