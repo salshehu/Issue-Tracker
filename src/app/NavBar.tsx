@@ -1,7 +1,14 @@
 "use client";
 
 import { Spinner } from "@/_components";
-import { Box, Button, Flex, Text } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Button,
+  DropdownMenu,
+  Flex,
+  Text,
+} from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
@@ -9,6 +16,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { AiFillBug } from "react-icons/ai";
 import { authOptions } from "./api/auth/[...nextauth]/route";
+import { BsPerson } from "react-icons/bs";
 
 const NavBar = () => {
   //getting user session in client comp
@@ -57,11 +65,28 @@ const NavBar = () => {
       </Flex>
       <Box className="items-center justify-center">
         {status === "authenticated" && (
-          <div>
-            <span>{session.user?.email}</span>
-            <span>{session.user?.image && session.user.image}</span>
-            <Link href="/api/auth/signout">Sign Out</Link>
-          </div>
+          <DropdownMenu.Root>
+            <DropdownMenu.Trigger>
+              <Avatar
+                src={session.user?.image!}
+                fallback={<BsPerson />}
+                size="2"
+                radius="full"
+                className="cursor-pointer"
+              />
+            </DropdownMenu.Trigger>
+            <DropdownMenu.Content
+              color="indigo"
+              className="border-blue-400 bg-yellow-300"
+            >
+              <DropdownMenu.Label>
+                <span>{session.user?.email}</span>
+              </DropdownMenu.Label>
+              <DropdownMenu.Item>
+                <Link href="/api/auth/signout">Sign Out</Link>
+              </DropdownMenu.Item>
+            </DropdownMenu.Content>
+          </DropdownMenu.Root>
         )}
         {status === "unauthenticated" && <Link href="/login">Sign In</Link>}
       </Box>

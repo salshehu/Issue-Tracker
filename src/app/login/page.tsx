@@ -16,7 +16,7 @@ const LoginPage = () => {
 
     try {
       const { email, password } = credentials;
-      await signIn("credentials", { email, password });
+      await signIn("Credentials", { email, password });
       router.push("/auth/callback");
       console.log("login went through");
     } catch (error) {

@@ -27,7 +27,7 @@ async function getUser(email: string): Promise<User | undefined> {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // adapter: PrismaAdapter(prisma),
   providers: [
     // @ts-ignore
     // OAuth authentication providers...
