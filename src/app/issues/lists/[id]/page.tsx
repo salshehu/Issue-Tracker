@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { BsPencil } from "react-icons/bs";
 import prisma from "../../../../../prisma/client";
 import DeleteIssueBtn from "./DeleteIssueBtn";
+import AssigneeSelect from "./AssigneeSelect";
 
 interface Props {
   params: { id: string };
@@ -58,6 +59,7 @@ const IssueDetailsPage = async ({ params }: Props) => {
           gap={"3"}
           className="flex-row justify-end md:flex-col  mx-3 mt-3 "
         >
+          <AssigneeSelect />
           <LinkComp href={`/issues/lists/${issue.id}/edit`}>
             <EditDeleteBtn text="Edit Issue" icon={<BsPencil />} />
           </LinkComp>
