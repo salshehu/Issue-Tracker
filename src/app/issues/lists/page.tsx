@@ -12,7 +12,21 @@ import IssueStatusBadge from "../../../_components/IssueStatusBadge";
 import IssuesTopBar from "../_components/IssuesTopBar";
 
 const Issues = async () => {
-  const issues = await prisma.issue.findMany();
+  const entries = await prisma.devs.findMany({
+    select: {
+      userName: true,
+      issues: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          status: true,
+          createdAt: true,
+          dateCompleted: true,
+        },
+      },
+    },
+  });
 
   return (
     <div className="m-auto p-5 ">
@@ -21,36 +35,48 @@ const Issues = async () => {
         <Table.Root variant="surface">
           <TableHeader>
             <TableRow>
-              <TableColumnHeaderCell>Id</TableColumnHeaderCell>
               <TableColumnHeaderCell>Issue</TableColumnHeaderCell>
               <TableColumnHeaderCell className="hidden md:table-cell">
                 Status
               </TableColumnHeaderCell>
+              <TableColumnHeaderCell>Assigned to:</TableColumnHeaderCell>
               <TableColumnHeaderCell className="hidden md:table-cell">
                 Created
+              </TableColumnHeaderCell>
+              <TableColumnHeaderCell className="hidden md:table-cell">
+                Completed
               </TableColumnHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {issues.map((issue) => (
-              <TableRow key={issue.id}>
-                <TableCell>{issue.id}</TableCell>
-                <TableCell>
-                  <LinkComp href={`/issues/lists/${issue.id}`}>
-                    {issue.title}{" "}
-                    <div className="block md:hidden">
-                      <IssueStatusBadge status={issue.status} />
-                    </div>
-                  </LinkComp>
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  <IssueStatusBadge status={issue.status} />
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {issue.createdAt.toDateString()}
-                </TableCell>
-              </TableRow>
-            ))}
+            {entries.map((dev) =>
+              dev.issues.map((issue) => (
+                <TableRow key={issue.id}>
+                  <TableCell>
+                    <LinkComp href={`/issues/lists/${issue.id}`}>
+                      {issue.title}{" "}
+                      <div className="block md:hidden">
+                        <IssueStatusBadge status={issue.status} />
+                      </div>
+                    </LinkComp>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <IssueStatusBadge status={issue.status} />
+                  </TableCell>
+                  <TableCell>{dev.userName}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {issue.createdAt.toDateString()}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {issue.dateCompleted ? (
+                      issue.dateCompleted.toDateString()
+                    ) : (
+                      <span>Pending</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table.Root>
       </div>

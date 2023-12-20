@@ -32,8 +32,8 @@ const NavBar = () => {
             </div>
             <p className="font-semibold text-center text-sm">Symbiotic</p>
           </Link>
-          <NavLinks />
         </Flex>
+        <NavLinks />
       </Flex>
       <AuthStatus />
     </nav>
