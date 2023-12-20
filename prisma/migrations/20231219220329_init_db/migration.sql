@@ -1,3 +1,31 @@
+-- CreateEnum
+CREATE TYPE "Status" AS ENUM ('OPEN', 'IN_PROGRESS', 'CLOSED');
+
+-- CreateTable
+CREATE TABLE "Issue" (
+    "id" SERIAL NOT NULL,
+    "devId" TEXT,
+    "title" VARCHAR(255) NOT NULL,
+    "description" TEXT NOT NULL,
+    "status" "Status" NOT NULL DEFAULT 'OPEN',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "dateCompleted" TIMESTAMP(3),
+
+    CONSTRAINT "Issue_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Devs" (
+    "id" TEXT NOT NULL,
+    "userName" TEXT NOT NULL,
+    "firstName" TEXT NOT NULL,
+    "lastName" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+
+    CONSTRAINT "Devs_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateTable
 CREATE TABLE "Account" (
     "id" TEXT NOT NULL,
@@ -31,8 +59,11 @@ CREATE TABLE "Session" (
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT,
+    "organisation" TEXT,
+    "country" TEXT,
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
+    "hashedPassword" TEXT,
     "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -53,6 +84,12 @@ CREATE TABLE "VerificationRequest" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Devs_userName_key" ON "Devs"("userName");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Devs_email_key" ON "Devs"("email");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Account_providerId_providerAccountId_key" ON "Account"("providerId", "providerAccountId");
 
 -- CreateIndex
@@ -69,6 +106,9 @@ CREATE UNIQUE INDEX "VerificationRequest_token_key" ON "VerificationRequest"("to
 
 -- CreateIndex
 CREATE UNIQUE INDEX "VerificationRequest_identifier_token_key" ON "VerificationRequest"("identifier", "token");
+
+-- AddForeignKey
+ALTER TABLE "Issue" ADD CONSTRAINT "Issue_devId_fkey" FOREIGN KEY ("devId") REFERENCES "Devs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

@@ -12,20 +12,22 @@ interface Props {
 }
 
 async function getIssue({ id }: { id: string }) {
-  const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(id) },
-  });
-
-  if (!issue) throw new Error();
-
-  return issue;
+  try {
+    const issue = await prisma.issue.findUnique({
+      where: { id: parseInt(id) },
+    });
+    if (!issue) throw new Error();
+    return issue;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export async function generateMetadata({ params }: Props) {
   const mdata = await getIssue(params);
   return {
-    title: mdata.title,
-    description: mdata.description,
+    title: mdata?.title,
+    description: mdata?.description,
   };
 }
 

@@ -11,18 +11,30 @@ datasource db {
 }
 
 model Issue {
-  id          Int      @id @default(autoincrement())
-  title       String   @db.VarChar(255)
-  description String   @db.Text
-  status      Status   @default(OPEN)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            Int       @id @default(autoincrement())
+  devId         String?
+  title         String    @db.VarChar(255)
+  description   String    @db.Text
+  status        Status    @default(OPEN)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  assignee      Devs?     @relation(fields: [devId], references: [id])
+  dateCompleted DateTime?
 }
 
 enum Status {
   OPEN
   IN_PROGRESS
   CLOSED
+}
+
+model Devs {
+  id        String     @id @default(cuid())
+  userName  String  @unique
+  firstName String
+  lastName  String
+  email     String  @unique
+  issues    Issue[]
 }
 
 model Account {

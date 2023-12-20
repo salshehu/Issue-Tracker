@@ -2,7 +2,25 @@ import { z } from "zod";
 
 export const Issueschema = z.object({
   title: z.string().min(3, "Title must 3 chars long").max(255),
-  description: z.string().min(1, "description can not be empty"),
+  description: z.string().min(1, "description can not be empty").max(65535),
+});
+
+export const IssuesSchemaPatch = z.object({
+  title: z
+    .string()
+    .min(3, "Title must 3 chars long")
+    .max(255)
+    .optional()
+    .nullable(),
+  description: z
+    .string()
+    .min(1, "description can not be empty")
+    .max(65535)
+    .optional()
+    .nullable(),
+  status: z.enum(["OPEN", "CLOSED", "IN_PROGRESS"]).optional().default("OPEN"),
+  devId: z.string().optional(),
+  dateCompleted: z.date().optional().nullable(),
 });
 
 export const RegisterFormSchema = z.object({
@@ -17,4 +35,11 @@ export const RegisterFormSchema = z.object({
     .string()
     .min(8, { message: "Password must be at least 8 characters long" }),
   password2: z.string(),
+});
+
+export const DevsSchema = z.object({
+  userName: z.string().min(3).max(50),
+  firstName: z.string().min(2).max(50),
+  lastName: z.string().min(2).max(50),
+  email: z.string().email(),
 });

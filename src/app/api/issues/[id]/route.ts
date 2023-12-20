@@ -1,17 +1,33 @@
-import { Issueschema } from "@/_lib/schemaValidation";
+import { IssuesSchemaPatch } from "@/_lib/schemaValidation";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
+import { Issue } from "@prisma/client";
 
-// POST fn to create new issue:
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const issue = await prisma.issue.findUnique({
+    where: { id: parseInt(params.id) },
+  });
+
+  if (!issue) return NextResponse.json("Record not found", { status: 404 });
+
+  return NextResponse.json(issue);
+}
+
+// POST fn to edit issue:
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const body = await request.json();
-  const checkvalid = Issueschema.safeParse(body);
+  const checkvalid = IssuesSchemaPatch.safeParse(body);
 
   if (!checkvalid.success)
     return NextResponse.json(checkvalid.error.format(), { status: 400 });
+
+  const { data: update } = checkvalid;
 
   const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
@@ -25,7 +41,13 @@ export async function PATCH(
 
   const updatedIssue = await prisma.issue.update({
     where: { id: issue.id },
-    data: { title: body.title, description: body.description },
+    data: {
+      title: update.title!,
+      description: update.description!,
+      dateCompleted: update.dateCompleted!,
+      status: update.status,
+      devId: update.devId,
+    },
   });
 
   return NextResponse.json(updatedIssue);
@@ -39,11 +61,11 @@ export async function DELETE(
     where: { id: parseInt(params.id) },
   });
 
-  if (!id) return NextResponse.json("Not found", { status: 404 });
+  if (!id) return NextResponse.json("Record not found", { status: 404 });
 
   const del = await prisma.issue.delete({
     where: { id: parseInt(params.id) },
   });
 
-  return NextResponse.json({ mssg: del });
+  return NextResponse.json({ action: "delete", mssg: del });
 }
