@@ -137,10 +137,10 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             {devs?.map((dev) => (
               <option
                 key={dev.id}
-                value={issue?.devId || undefined}
+                value={issue?.devId || dev.id}
                 defaultValue={issue?.devId ? devUserName(issue) : "null"}
               >
-                {dev.userName || null}
+                {dev.userName || "unassigned"}
               </option>
             ))}
           </select>

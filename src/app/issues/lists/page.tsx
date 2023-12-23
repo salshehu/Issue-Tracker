@@ -14,6 +14,7 @@ import EditDeleteBtn from "@/_components/EditDeleteBtn";
 import DeleteIssueBtn from "./[id]/DeleteIssueBtn";
 import EditIssueBtn from "../_components/EditIssueBtn";
 import Link from "next/link";
+import IssueStatusFIlter from "../_components/IssueStatusFIlter";
 
 const Issues = async () => {
   const entries = await prisma.devs.findMany({
@@ -42,7 +43,7 @@ const Issues = async () => {
             <TableRow>
               <TableColumnHeaderCell>Issue</TableColumnHeaderCell>
               <TableColumnHeaderCell className="hidden md:table-cell">
-                Status
+                <IssueStatusFIlter />
               </TableColumnHeaderCell>
               <TableColumnHeaderCell>Assigned to:</TableColumnHeaderCell>
               <TableColumnHeaderCell className="hidden md:table-cell">
