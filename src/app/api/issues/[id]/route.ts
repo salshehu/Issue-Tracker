@@ -21,6 +21,8 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  const id = parseInt(params.id) || 0;
+
   const body = await request.json();
   const checkvalid = IssuesSchemaPatch.safeParse(body);
 
@@ -30,7 +32,7 @@ export async function PATCH(
   const { data: update } = checkvalid;
 
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { id },
   });
 
   if (!issue)

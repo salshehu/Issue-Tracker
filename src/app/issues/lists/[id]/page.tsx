@@ -6,6 +6,7 @@ import { BsPencil } from "react-icons/bs";
 import prisma from "../../../../../prisma/client";
 import DeleteIssueBtn from "./DeleteIssueBtn";
 import AssigneeSelect from "./AssigneeSelect";
+import EditIssueBtn from "../../_components/EditIssueBtn";
 
 interface Props {
   params: { id: string };
@@ -16,6 +17,7 @@ async function getIssue({ id }: { id: string }) {
     const issue = await prisma.issue.findUnique({
       where: { id: parseInt(id) },
     });
+
     if (!issue) throw new Error();
     return issue;
   } catch (error) {
@@ -61,9 +63,8 @@ const IssueDetailsPage = async ({ params }: Props) => {
           gap={"3"}
           className="flex-row justify-end md:flex-col  mx-3 mt-3 "
         >
-          <AssigneeSelect />
           <LinkComp href={`/issues/lists/${issue.id}/edit`}>
-            <EditDeleteBtn text="Edit Issue" icon={<BsPencil />} />
+            <EditIssueBtn />
           </LinkComp>
 
           <DeleteIssueBtn id={issue.id} />

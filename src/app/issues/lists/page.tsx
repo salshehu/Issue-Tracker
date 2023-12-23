@@ -10,6 +10,10 @@ import prisma from "../../../../prisma/client";
 import { LinkComp } from "../../../_components";
 import IssueStatusBadge from "../../../_components/IssueStatusBadge";
 import IssuesTopBar from "../_components/IssuesTopBar";
+import EditDeleteBtn from "@/_components/EditDeleteBtn";
+import DeleteIssueBtn from "./[id]/DeleteIssueBtn";
+import EditIssueBtn from "../_components/EditIssueBtn";
+import Link from "next/link";
 
 const Issues = async () => {
   const entries = await prisma.devs.findMany({
@@ -23,6 +27,7 @@ const Issues = async () => {
           status: true,
           createdAt: true,
           dateCompleted: true,
+          devId: undefined,
         },
       },
     },
@@ -46,6 +51,7 @@ const Issues = async () => {
               <TableColumnHeaderCell className="hidden md:table-cell">
                 Completed
               </TableColumnHeaderCell>
+              <TableColumnHeaderCell></TableColumnHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -63,7 +69,7 @@ const Issues = async () => {
                   <TableCell className="hidden md:table-cell">
                     <IssueStatusBadge status={issue.status} />
                   </TableCell>
-                  <TableCell>{dev.userName}</TableCell>
+                  <TableCell>{dev ? dev.userName : "unassigned"}</TableCell>
                   <TableCell className="hidden md:table-cell">
                     {issue.createdAt.toDateString()}
                   </TableCell>
@@ -73,6 +79,12 @@ const Issues = async () => {
                     ) : (
                       <span>Pending</span>
                     )}
+                  </TableCell>
+                  <TableCell className="flex gap-2 h-4 items-center">
+                    <Link href={`/issues/lists/${issue.id}/edit`}>
+                      <EditIssueBtn />
+                    </Link>
+                    <DeleteIssueBtn id={issue.id} />
                   </TableCell>
                 </TableRow>
               ))

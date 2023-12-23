@@ -1,4 +1,4 @@
-import { DevsSchema } from "@/_lib/schemaValidation";
+import { DevsSchemaPatch } from "@/_lib/schemaValidation";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
 
@@ -19,7 +19,7 @@ export async function PATCH(
 ) {
   const patchdata = await request.json();
 
-  const checkData = DevsSchema.safeParse(patchdata);
+  const checkData = DevsSchemaPatch.safeParse(patchdata);
 
   if (!checkData.success)
     return NextResponse.json(checkData.error.format(), { status: 400 });

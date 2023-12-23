@@ -39,8 +39,8 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
         /> */}
           <Button color="red" variant="surface" disabled={isDeleting}>
             {!isDeleting && <BsTrash />}
-            {!isDeleting && "Delete Issue"}
-            {isDeleting && <Spinner text="Deleting issue" />}
+            {!isDeleting && "Delete"}
+            {isDeleting && <Spinner text="Deleting..." />}
           </Button>
         </AlertDialog.Trigger>
         <AlertDialog.Content>
@@ -74,6 +74,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
                 color="plum"
                 variant="ghost"
                 onClick={() => setErr(false)}
+                className="w-9"
               >
                 OK
               </Button>

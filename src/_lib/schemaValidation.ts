@@ -3,6 +3,9 @@ import { z } from "zod";
 export const Issueschema = z.object({
   title: z.string().min(3, "Title must 3 chars long").max(255),
   description: z.string().min(1, "description can not be empty").max(65535),
+  status: z.enum(["OPEN", "CLOSED", "IN_PROGRESS"]).optional(),
+  devId: z.string().optional(),
+  dateCompleted: z.coerce.date().optional().nullable().default(null),
 });
 
 export const IssuesSchemaPatch = z.object({
@@ -20,7 +23,7 @@ export const IssuesSchemaPatch = z.object({
     .nullable(),
   status: z.enum(["OPEN", "CLOSED", "IN_PROGRESS"]).optional().default("OPEN"),
   devId: z.string().optional(),
-  dateCompleted: z.date().optional().nullable(),
+  dateCompleted: z.coerce.date().optional().nullable().default(null),
 });
 
 export const RegisterFormSchema = z.object({
@@ -42,4 +45,11 @@ export const DevsSchema = z.object({
   firstName: z.string().min(2).max(50),
   lastName: z.string().min(2).max(50),
   email: z.string().email(),
+});
+
+export const DevsSchemaPatch = z.object({
+  userName: z.string().min(3).max(50).optional(),
+  firstName: z.string().min(2).max(50).optional(),
+  lastName: z.string().min(2).max(50).optional(),
+  email: z.string().email().optional(),
 });
