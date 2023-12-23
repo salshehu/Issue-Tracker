@@ -26,16 +26,40 @@ interface Props {
 interface Entries {
   title: string;
   status: string;
-  assignedto: string;
+  devId: string;
   createdAt: Date;
   dateCompleted: Date;
 }
 
+// extraction of table column headers
+const columnsHeaders: {
+  label: string;
+  value: keyof Entries;
+  className?: string;
+}[] = [
+  { label: "Issue", value: "title" },
+  { label: "Status", value: "status", className: "hidden md:table-cell" },
+  { label: "Assigned to:", value: "devId" },
+  { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
+  {
+    label: "Completed",
+    value: "dateCompleted",
+    className: "hidden md:table-cell gap-1",
+  },
+];
+
 const Issues = async ({ searchParams }: Props) => {
+  //********************** */
   // validate query paramater received before passing to prisma
   const statusCheck = Object.values(Status);
   const status = statusCheck.includes(searchParams.status)
     ? searchParams.status
+    : undefined;
+
+  const orderBy = columnsHeaders
+    .map((col) => col.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: "asc" }
     : undefined;
 
   //call to prisma to fetch data
@@ -56,25 +80,10 @@ const Issues = async ({ searchParams }: Props) => {
           dateCompleted: true,
           devId: undefined,
         },
+        orderBy,
       },
     },
   });
-
-  const columnsHeaders: {
-    label: string;
-    value: keyof Entries;
-    className?: string;
-  }[] = [
-    { label: "Issue", value: "title" },
-    { label: "Status", value: "status", className: "hidden md:table-cell" },
-    { label: "Assigned to:", value: "assignedto" },
-    { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
-    {
-      label: "Completed",
-      value: "dateCompleted",
-      className: "hidden md:table-cell gap-1",
-    },
-  ];
 
   return (
     <div className="m-auto p-5 ">
