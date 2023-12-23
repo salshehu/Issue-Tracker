@@ -15,12 +15,38 @@ import DeleteIssueBtn from "./[id]/DeleteIssueBtn";
 import EditIssueBtn from "../_components/EditIssueBtn";
 import Link from "next/link";
 import IssueStatusFIlter from "../_components/IssueStatusFIlter";
+import { Issue, Status } from "@prisma/client";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { BsChevronUp } from "react-icons/bs";
 
-const Issues = async () => {
+interface Props {
+  searchParams: { status: Status; orderBy: keyof Entries };
+}
+
+interface Entries {
+  title: string;
+  status: string;
+  assignedto: string;
+  createdAt: Date;
+  dateCompleted: Date;
+}
+
+const Issues = async ({ searchParams }: Props) => {
+  // validate query paramater received before passing to prisma
+  const statusCheck = Object.values(Status);
+  const status = statusCheck.includes(searchParams.status)
+    ? searchParams.status
+    : undefined;
+
+  //call to prisma to fetch data
   const entries = await prisma.devs.findMany({
     select: {
       userName: true,
+
       issues: {
+        where: {
+          status,
+        },
         select: {
           id: true,
           title: true,
@@ -34,6 +60,22 @@ const Issues = async () => {
     },
   });
 
+  const columnsHeaders: {
+    label: string;
+    value: keyof Entries;
+    className?: string;
+  }[] = [
+    { label: "Issue", value: "title" },
+    { label: "Status", value: "status", className: "hidden md:table-cell" },
+    { label: "Assigned to:", value: "assignedto" },
+    { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
+    {
+      label: "Completed",
+      value: "dateCompleted",
+      className: "hidden md:table-cell gap-1",
+    },
+  ];
+
   return (
     <div className="m-auto p-5 ">
       <IssuesTopBar />
@@ -41,17 +83,22 @@ const Issues = async () => {
         <Table.Root variant="surface">
           <TableHeader>
             <TableRow>
-              <TableColumnHeaderCell>Issue</TableColumnHeaderCell>
-              <TableColumnHeaderCell className="hidden md:table-cell">
-                <IssueStatusFIlter />
-              </TableColumnHeaderCell>
-              <TableColumnHeaderCell>Assigned to:</TableColumnHeaderCell>
-              <TableColumnHeaderCell className="hidden md:table-cell">
-                Created
-              </TableColumnHeaderCell>
-              <TableColumnHeaderCell className="hidden md:table-cell">
-                Completed
-              </TableColumnHeaderCell>
+              {columnsHeaders.map((h) => (
+                <TableColumnHeaderCell key={h.value} className={h.className}>
+                  <div className="flex gap-1 items-center">
+                    {h.value === searchParams.orderBy && (
+                      <BsChevronUp className="inline ml-1" />
+                    )}
+                    <Link
+                      href={{ query: { ...searchParams, orderBy: h.value } }}
+                    >
+                      {h.label !== "Status" && h.label}
+                      {h.label === "Status" && h.label}
+                      {h.label === "Status" && <IssueStatusFIlter />}
+                    </Link>
+                  </div>
+                </TableColumnHeaderCell>
+              ))}
               <TableColumnHeaderCell></TableColumnHeaderCell>
             </TableRow>
           </TableHeader>
