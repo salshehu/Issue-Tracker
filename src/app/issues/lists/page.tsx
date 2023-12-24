@@ -18,6 +18,7 @@ import IssueStatusFIlter from "../_components/IssueStatusFIlter";
 import { Issue, Status } from "@prisma/client";
 import { valibotResolver } from "@hookform/resolvers/valibot";
 import { BsChevronUp } from "react-icons/bs";
+import Pagination from "@/_components/Pagination";
 
 interface Props {
   searchParams: { status: Status; orderBy: keyof Entries };
@@ -88,7 +89,7 @@ const Issues = async ({ searchParams }: Props) => {
   return (
     <div className="m-auto p-5 ">
       <IssuesTopBar />
-      <div>
+      <div className="my-3">
         <Table.Root variant="surface">
           <TableHeader>
             <TableRow>
@@ -148,6 +149,7 @@ const Issues = async ({ searchParams }: Props) => {
             )}
           </TableBody>
         </Table.Root>
+        <Pagination currentPage={2} itemsCount={9} pageSize={3} />
       </div>
     </div>
   );
