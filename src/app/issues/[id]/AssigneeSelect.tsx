@@ -1,6 +1,6 @@
 "use client";
 import { Skeleton, Spinner } from "@/_components";
-import { Devs } from "@prisma/client";
+import { Developers } from "@prisma/client";
 import { Heading, Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -8,33 +8,7 @@ import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const AssigneeSelect = ({ id }: { id: number }) => {
-  // const [devs, setDevs] = useState<Devs[]>([]);
-
-  // useEffect(() => {
-  //   const getDevs = async () => {
-  //     const res = await fetch("/api/devs");
-  //     if (!res.ok) return null;
-
-  //     const devlist = await res.json();
-  //     return setDevs(devlist);
-  //   };
-
-  //   getDevs();
-  // }, []);
-
-  const {
-    data: devs,
-    error,
-    isLoading,
-  } = useQuery<Devs[]>({
-    queryKey: ["assignees"],
-    queryFn: async () =>
-      await fetch("/api/devs")
-        .then((res) => res.json())
-        .catch((e) => console.log(e)),
-    retry: 3,
-    staleTime: 60 * 1000, //list of entries will be cached for 60s i.e. 1mins
-  });
+  const { data: devs, error, isLoading } = useFetchDev();
 
   if (isLoading) return <Spinner text="Loading..." />;
 
@@ -67,9 +41,19 @@ const AssigneeSelect = ({ id }: { id: number }) => {
   );
 };
 
+const useFetchDev = () =>
+  useQuery<Developers[]>({
+    queryKey: ["assignees"],
+    queryFn: async () =>
+      await fetch("/api/devs")
+        .then((res) => res.json())
+        .catch((e) => console.log(e)),
+    retry: 3,
+    staleTime: 60 * 1000, //list of entries will be cached for 60s i.e. 1mins
+  });
+
 export default AssigneeSelect;
 
-//
 // onValueChange={async (dev) => {
 //   console.log(dev);
 
@@ -90,3 +74,17 @@ export default AssigneeSelect;
 //     toast.error("Assignment failed, try again");
 //   }
 // }}
+
+// const [devs, setDevs] = useState<Devs[]>([]);
+
+// useEffect(() => {
+//   const getDevs = async () => {
+//     const res = await fetch("/api/devs");
+//     if (!res.ok) return null;
+
+//     const devlist = await res.json();
+//     return setDevs(devlist);
+//   };
+
+//   getDevs();
+// }, []);

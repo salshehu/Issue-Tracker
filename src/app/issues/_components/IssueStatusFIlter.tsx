@@ -26,27 +26,28 @@ const IssueStatusFIlter = () => {
   // }
 
   return (
-    <Select.Root
-      onValueChange={(status) => {
-        if (status) params.append("status", status);
-        if (searchParams.get("orderBy"))
-          params.append("orderBy", searchParams.get("orderBy")!);
-
-        const query = params.size ? "?" + params.toString() : "";
-        router.push("/issues/lists" + query);
-      }}
-      defaultValue={searchParams.get("status") || ""}
-      size="1"
-    >
-      <Select.Trigger />
-      <Select.Content>
-        {statusList.map((status) => (
-          <Select.Item key={status.value} value={status?.value || "Status"}>
-            {status.label}
-          </Select.Item>
-        ))}
-      </Select.Content>
-    </Select.Root>
+    <div className="mx-1 inline-block">
+      <Select.Root
+        onValueChange={(status) => {
+          if (status) params.append("status", status);
+          if (searchParams.get("orderBy"))
+            params.append("orderBy", searchParams.get("orderBy")!);
+          const query = params.size ? "?" + params.toString() : "";
+          router.push("/issues/lists" + query);
+        }}
+        defaultValue={searchParams.get("status") || ""}
+        size="1"
+      >
+        <Select.Trigger />
+        <Select.Content>
+          {statusList.map((status) => (
+            <Select.Item key={status.value} value={status?.value || "Status"}>
+              {status.label}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+    </div>
 
     // <select
     //   onChange={(e)=>qryStr(e.target.value)}

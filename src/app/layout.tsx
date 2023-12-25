@@ -7,7 +7,7 @@ import { Container, Theme, ThemePanel } from "@radix-ui/themes";
 import NavBar from "./NavBar";
 import AuthProvider from "@/_components/AuthProvider";
 import Footer from "./Footer";
-import QueryClientProvider from "./QueryClientProvider";
+import QueryClientProvider from "../_lib/QueryClientProvider";
 
 const inter = Inter({
   subsets: ["latin"],

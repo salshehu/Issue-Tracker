@@ -19,7 +19,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
         method: "DELETE",
       });
       if (!res.ok) return setErr(true);
-      router.push("/issues/lists");
+      router.push("/issues");
       router.refresh();
     } catch (error) {
       setErr(true);
@@ -83,7 +83,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
               <Button
                 color="red"
                 variant="surface"
-                onClick={() => router.push("/issues/lists")}
+                onClick={() => router.push("/issues")}
               >
                 Cancel
               </Button>

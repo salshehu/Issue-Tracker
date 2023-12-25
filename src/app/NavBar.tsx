@@ -46,7 +46,7 @@ const NavLinks = () => {
   const links = [
     { id: 1, label: "Home", href: "/" },
     { id: 2, label: "Dashboard", href: "/dashboard" },
-    { id: 3, label: "Issues", href: "/issues/lists" },
+    { id: 3, label: "Issues", href: "/issues" },
     { id: 4, label: "About", href: "/info" },
   ];
 
@@ -91,10 +91,7 @@ const AuthStatus = () => {
             className="cursor-pointer"
           />
         </DropdownMenu.Trigger>
-        <DropdownMenu.Content
-          color="indigo"
-          className="border-blue-400 bg-yellow-300"
-        >
+        <DropdownMenu.Content color="indigo" className="border-blue-400">
           <DropdownMenu.Label>
             <span>{session!.user?.email}</span>
           </DropdownMenu.Label>

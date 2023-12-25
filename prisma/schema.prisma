@@ -10,6 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Status {
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum Contract{
+  FULL_TIME
+  PART_TIME
+  OUTSOURCED
+}
+
 model Issue {
   id            Int       @id @default(autoincrement())
   devId         String?
@@ -18,24 +30,35 @@ model Issue {
   status        Status    @default(OPEN)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  assignee      Devs?     @relation(fields: [devId], references: [id])
   dateCompleted DateTime?
+  devs      Developers?     @relation(fields: [devId], references: [id])
+  debugging Debugging?
 }
-
-enum Status {
-  OPEN
-  IN_PROGRESS
-  CLOSED
-}
-
-model Devs {
+model Developers {
   id        String     @id @default(cuid())
   userName  String  @unique
   firstName String
   lastName  String
+  contract  Contract @default(FULL_TIME)
+  profilePic  String?
+  address   String?
   email     String  @unique
   issues    Issue[]
+  debugging   Debugging?
 }
+
+model Debugging{
+  issueId            Int @unique
+  devId           String @unique
+  completeRate    Float
+  completed   Boolean @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  issue         Issue @relation(fields: [issueId], references: [id])
+  dev           Developers @relation(fields: [devId], references: [id])
+  @@id([issueId, devId])
+}
+
 
 model Account {
   id                 String    @id @default(cuid())

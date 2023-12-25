@@ -6,22 +6,20 @@ import {
   TableHeader,
   TableRow,
 } from "@radix-ui/themes";
-import prisma from "../../../../prisma/client";
-import { LinkComp } from "../../../_components";
-import IssueStatusBadge from "../../../_components/IssueStatusBadge";
-import IssuesTopBar from "../_components/IssuesTopBar";
-import EditDeleteBtn from "@/_components/EditDeleteBtn";
+import prisma from "../../../prisma/client";
+import { LinkComp } from "@/_components";
+import IssueStatusBadge from "@/_components/IssueStatusBadge";
+import IssuesTopBar from "./_components/IssuesTopBar";
 import DeleteIssueBtn from "./[id]/DeleteIssueBtn";
-import EditIssueBtn from "../_components/EditIssueBtn";
+import EditIssueBtn from "./_components/EditIssueBtn";
 import Link from "next/link";
-import IssueStatusFIlter from "../_components/IssueStatusFIlter";
+import IssueStatusFIlter from "./_components/IssueStatusFIlter";
 import { Issue, Status } from "@prisma/client";
-import { valibotResolver } from "@hookform/resolvers/valibot";
 import { BsChevronUp } from "react-icons/bs";
 import Pagination from "@/_components/Pagination";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Entries };
+  searchParams: { status: Status; orderBy: keyof Entries; page: string };
 }
 
 interface Entries {
@@ -63,15 +61,15 @@ const Issues = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: "asc" }
     : undefined;
 
+  // set-up pagination
+  const page = +searchParams.page || 1;
+  const pageSize: number = 5;
+
   //call to prisma to fetch data
-  const entries = await prisma.devs.findMany({
+  const entries = await prisma.developers.findMany({
     select: {
       userName: true,
-
       issues: {
-        where: {
-          status,
-        },
         select: {
           id: true,
           title: true,
@@ -81,10 +79,17 @@ const Issues = async ({ searchParams }: Props) => {
           dateCompleted: true,
           devId: undefined,
         },
+        where: {
+          status,
+        },
         orderBy,
       },
     },
+    skip: (page - 1) * pageSize,
+    take: pageSize,
   });
+
+  const issueCount = await prisma.issue.count({ where: { status } });
 
   return (
     <div className="m-auto p-5 ">
@@ -117,7 +122,7 @@ const Issues = async ({ searchParams }: Props) => {
               dev.issues.map((issue) => (
                 <TableRow key={issue.id}>
                   <TableCell>
-                    <LinkComp href={`/issues/lists/${issue.id}`}>
+                    <LinkComp href={`/issues/${issue.id}`}>
                       {issue.title}{" "}
                       <div className="block md:hidden">
                         <IssueStatusBadge status={issue.status} />
@@ -139,7 +144,7 @@ const Issues = async ({ searchParams }: Props) => {
                     )}
                   </TableCell>
                   <TableCell className="flex gap-2 h-4 items-center">
-                    <Link href={`/issues/lists/${issue.id}/edit`}>
+                    <Link href={`/issues/edit/${issue.id}`}>
                       <EditIssueBtn />
                     </Link>
                     <DeleteIssueBtn id={issue.id} />
@@ -149,7 +154,11 @@ const Issues = async ({ searchParams }: Props) => {
             )}
           </TableBody>
         </Table.Root>
-        <Pagination currentPage={2} itemsCount={9} pageSize={3} />
+        <Pagination
+          currentPage={page}
+          itemsCount={issueCount}
+          pageSize={pageSize}
+        />
       </div>
     </div>
   );

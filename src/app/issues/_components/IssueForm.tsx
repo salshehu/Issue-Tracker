@@ -3,7 +3,7 @@ import ErrorMessage from "@/_components/ErrorMessage";
 import Spinner from "@/_components/Spinner";
 import { Issueschema } from "@/_lib/schemaValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Devs, Issue, Status } from "@prisma/client";
+import { Developers, Issue, Status } from "@prisma/client";
 import { Button, Select, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import SimpleMde from "react-simplemde-editor";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import DeleteIssueBtn from "../lists/[id]/DeleteIssueBtn";
+import DeleteIssueBtn from "../[id]/DeleteIssueBtn";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 
@@ -45,7 +45,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     data: devs,
     error: errr,
     isLoading,
-  } = useQuery<Devs[]>({
+  } = useQuery<Developers[]>({
     queryKey: ["assignees"],
     queryFn: async () =>
       await fetch("/api/devs")
@@ -82,7 +82,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
       if (!res.ok) return new Error("entries are invalid");
 
-      route.push("/issues/lists");
+      route.push("/issues");
       route.refresh();
     } catch (err) {
       setIsSending(false);

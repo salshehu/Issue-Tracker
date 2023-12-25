@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('OPEN', 'IN_PROGRESS', 'CLOSED');
 
+-- CreateEnum
+CREATE TYPE "Contract" AS ENUM ('FULL_TIME', 'PART_TIME', 'OUTSOURCED');
+
 -- CreateTable
 CREATE TABLE "Issue" (
     "id" SERIAL NOT NULL,
@@ -16,14 +19,29 @@ CREATE TABLE "Issue" (
 );
 
 -- CreateTable
-CREATE TABLE "Devs" (
+CREATE TABLE "Developers" (
     "id" TEXT NOT NULL,
     "userName" TEXT NOT NULL,
     "firstName" TEXT NOT NULL,
     "lastName" TEXT NOT NULL,
+    "contract" "Contract" NOT NULL,
+    "profilePic" TEXT NOT NULL,
+    "address" TEXT NOT NULL,
     "email" TEXT NOT NULL,
 
-    CONSTRAINT "Devs_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Developers_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Debugging" (
+    "issueId" INTEGER NOT NULL,
+    "devId" TEXT NOT NULL,
+    "completeRate" DOUBLE PRECISION NOT NULL,
+    "completed" BOOLEAN NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Debugging_pkey" PRIMARY KEY ("issueId","devId")
 );
 
 -- CreateTable
@@ -84,10 +102,16 @@ CREATE TABLE "VerificationRequest" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Devs_userName_key" ON "Devs"("userName");
+CREATE UNIQUE INDEX "Developers_userName_key" ON "Developers"("userName");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Devs_email_key" ON "Devs"("email");
+CREATE UNIQUE INDEX "Developers_email_key" ON "Developers"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Debugging_issueId_key" ON "Debugging"("issueId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Debugging_devId_key" ON "Debugging"("devId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_providerId_providerAccountId_key" ON "Account"("providerId", "providerAccountId");
@@ -108,7 +132,13 @@ CREATE UNIQUE INDEX "VerificationRequest_token_key" ON "VerificationRequest"("to
 CREATE UNIQUE INDEX "VerificationRequest_identifier_token_key" ON "VerificationRequest"("identifier", "token");
 
 -- AddForeignKey
-ALTER TABLE "Issue" ADD CONSTRAINT "Issue_devId_fkey" FOREIGN KEY ("devId") REFERENCES "Devs"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Issue" ADD CONSTRAINT "Issue_devId_fkey" FOREIGN KEY ("devId") REFERENCES "Developers"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Debugging" ADD CONSTRAINT "Debugging_issueId_fkey" FOREIGN KEY ("issueId") REFERENCES "Issue"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Debugging" ADD CONSTRAINT "Debugging_devId_fkey" FOREIGN KEY ("devId") REFERENCES "Developers"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
