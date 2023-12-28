@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   const checkdev = DevsSchema.safeParse(post);
 
   if (!checkdev.success)
-    return NextResponse.json("Invalid entries", { status: 400 });
+    return NextResponse.json("Invalid entries, check again", { status: 400 });
 
   const newDev = await prisma.developers.create({
     data: {
@@ -25,6 +25,9 @@ export async function POST(request: NextRequest) {
       firstName: checkdev.data.firstName,
       lastName: checkdev.data.lastName,
       email: checkdev.data.email,
+      contract: checkdev.data.contract,
+      profilePic: checkdev.data.profilePic,
+      address: checkdev.data.address,
     },
   });
 

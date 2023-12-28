@@ -1,4 +1,4 @@
-import { DevsSchemaPatch } from "@/_lib/schemaValidation";
+import { DevsSchema } from "@/_lib/schemaValidation";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
 
@@ -19,7 +19,7 @@ export async function PATCH(
 ) {
   const patchdata = await request.json();
 
-  const checkData = DevsSchemaPatch.safeParse(patchdata);
+  const checkData = DevsSchema.safeParse(patchdata);
 
   if (!checkData.success)
     return NextResponse.json(checkData.error.format(), { status: 400 });
@@ -31,6 +31,8 @@ export async function PATCH(
   if (!findData)
     return NextResponse.json("Record does not exist", { status: 404 });
 
+  console.log(checkData.data);
+
   const updated = await prisma.developers.update({
     where: { Id: params.id },
     data: {
@@ -38,6 +40,9 @@ export async function PATCH(
       firstName: checkData.data.firstName,
       lastName: checkData.data.lastName,
       email: checkData.data.email,
+      contract: checkData.data.contract,
+      profilePic: checkData.data.profilePic,
+      address: checkData.data.address,
     },
   });
 

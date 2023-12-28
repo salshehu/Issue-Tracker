@@ -1,4 +1,4 @@
-import { IssuesSchemaPatch } from "@/_lib/schemaValidation";
+import { IssueSchema } from "@/_lib/schemaValidation";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../../prisma/client";
 import { Issue } from "@prisma/client";
@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const issue = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { Id: parseInt(params.id) },
   });
 
   if (!issue) return NextResponse.json("Record not found", { status: 404 });
@@ -21,10 +21,10 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const id = parseInt(params.id) || 0;
+  const Id = parseInt(params.id) || 0;
 
   const body = await request.json();
-  const checkvalid = IssuesSchemaPatch.safeParse(body);
+  const checkvalid = IssueSchema.safeParse(body);
 
   if (!checkvalid.success)
     return NextResponse.json(checkvalid.error.format(), { status: 400 });
@@ -32,7 +32,7 @@ export async function PATCH(
   const { data: update } = checkvalid;
 
   const issue = await prisma.issue.findUnique({
-    where: { id },
+    where: { Id },
   });
 
   if (!issue)
@@ -42,7 +42,7 @@ export async function PATCH(
     );
 
   const updatedIssue = await prisma.issue.update({
-    where: { id: issue.id },
+    where: { Id: issue.Id },
     data: {
       title: update.title!,
       description: update.description!,
@@ -60,13 +60,13 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   const id = await prisma.issue.findUnique({
-    where: { id: parseInt(params.id) },
+    where: { Id: parseInt(params.id) },
   });
 
   if (!id) return NextResponse.json("Record not found", { status: 404 });
 
   const del = await prisma.issue.delete({
-    where: { id: parseInt(params.id) },
+    where: { Id: parseInt(params.id) },
   });
 
   return NextResponse.json({ action: "delete", mssg: del });

@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../../prisma/client";
-import { Issueschema } from "../../../_lib/schemaValidation";
+import { IssueSchema } from "../../../_lib/schemaValidation";
 
 // POST fn to create new issue:
 export async function POST(request: NextRequest) {
   const issue = await request.json();
-  const checkvalid = Issueschema.safeParse(issue);
+  const checkvalid = IssueSchema.safeParse(issue);
 
   if (!checkvalid.success)
     return NextResponse.json(checkvalid.error.errors, { status: 400 });
 
-  const { title, description } = checkvalid.data;
+  const { title, description, status } = checkvalid.data;
 
   const newissue = await prisma.issue.create({
-    data: { title, description },
+    data: { title, description, status },
   });
 
   return NextResponse.json(newissue, { status: 201 });
