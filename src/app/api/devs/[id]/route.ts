@@ -6,7 +6,7 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const dev = await prisma.devs.findUnique({ where: { id: params.id } });
+  const dev = await prisma.developers.findUnique({ where: { Id: params.id } });
 
   if (!dev) return NextResponse.json("Record not found", { status: 404 });
 
@@ -24,15 +24,15 @@ export async function PATCH(
   if (!checkData.success)
     return NextResponse.json(checkData.error.format(), { status: 400 });
 
-  const findData = await prisma.devs.findUnique({
-    where: { id: params.id },
+  const findData = await prisma.developers.findUnique({
+    where: { Id: params.id },
   });
 
   if (!findData)
     return NextResponse.json("Record does not exist", { status: 404 });
 
-  const updated = await prisma.devs.update({
-    where: { id: params.id },
+  const updated = await prisma.developers.update({
+    where: { Id: params.id },
     data: {
       userName: checkData.data.userName,
       firstName: checkData.data.firstName,
@@ -50,14 +50,14 @@ export async function DELETE(
 ) {
   const delDate = await request.json();
 
-  const searchDate = await prisma.devs.findUnique({
-    where: { id: params.id },
+  const searchDate = await prisma.developers.findUnique({
+    where: { Id: params.id },
   });
 
   if (!searchDate)
     return NextResponse.json("No such record exists", { status: 404 });
 
-  const res = await prisma.devs.delete({ where: { id: params.id } });
+  const res = await prisma.developers.delete({ where: { Id: params.id } });
 
   return NextResponse.json({ action: "delete", mssg: res });
 }

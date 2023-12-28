@@ -17,6 +17,7 @@ import IssueStatusFIlter from "./_components/IssueStatusFIlter";
 import { Issue, Status } from "@prisma/client";
 import { BsChevronUp } from "react-icons/bs";
 import Pagination from "@/_components/Pagination";
+import { equal } from "assert";
 
 interface Props {
   searchParams: { status: Status; orderBy: keyof Entries; page: string };
@@ -25,9 +26,10 @@ interface Props {
 interface Entries {
   title: string;
   status: string;
-  devId: string;
+  Id: string;
   createdAt: Date;
   dateCompleted: Date;
+  userName: string;
 }
 
 // extraction of table column headers
@@ -38,7 +40,7 @@ const columnsHeaders: {
 }[] = [
   { label: "Issue", value: "title" },
   { label: "Status", value: "status", className: "hidden md:table-cell" },
-  { label: "Assigned to:", value: "devId" },
+  { label: "Assigned to:", value: "userName" },
   { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
   {
     label: "Completed",
@@ -63,28 +65,37 @@ const Issues = async ({ searchParams }: Props) => {
 
   // set-up pagination
   const page = +searchParams.page || 1;
-  const pageSize: number = 5;
+  const pageSize: number = 7;
 
   //call to prisma to fetch data
-  const entries = await prisma.developers.findMany({
-    select: {
-      userName: true,
-      issues: {
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          status: true,
-          createdAt: true,
-          dateCompleted: true,
-          devId: undefined,
-        },
-        where: {
-          status,
-        },
-        orderBy,
-      },
+  // const entries = await prisma.developers.findMany({
+  //   select: {
+  //     userName: true,
+  //     issues: {
+  //       select: {
+  //         Id: true,
+  //         title: true,
+  //         description: true,
+  //         status: true,
+  //         createdAt: true,
+  //         dateCompleted: true,
+  //         devId: undefined,
+  //       },
+  //       where: {
+  //         status,
+  //       },
+  //       orderBy,
+  //     },
+  //   },
+  //   skip: (page - 1) * pageSize,
+  //   take: pageSize,
+  // });
+
+  const entries = await prisma.issueView.findMany({
+    where: {
+      status,
     },
+    orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
   });
@@ -118,40 +129,38 @@ const Issues = async ({ searchParams }: Props) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {entries.map((dev) =>
-              dev.issues.map((issue) => (
-                <TableRow key={issue.id}>
-                  <TableCell>
-                    <LinkComp href={`/issues/${issue.id}`}>
-                      {issue.title}{" "}
-                      <div className="block md:hidden">
-                        <IssueStatusBadge status={issue.status} />
-                      </div>
-                    </LinkComp>
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    <IssueStatusBadge status={issue.status} />
-                  </TableCell>
-                  <TableCell>{dev ? dev.userName : "unassigned"}</TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {issue.createdAt.toDateString()}
-                  </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {issue.dateCompleted ? (
-                      issue.dateCompleted.toDateString()
-                    ) : (
-                      <span>Pending</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="flex gap-2 h-4 items-center">
-                    <Link href={`/issues/edit/${issue.id}`}>
-                      <EditIssueBtn />
-                    </Link>
-                    <DeleteIssueBtn id={issue.id} />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
+            {entries.map((issue) => (
+              <TableRow key={issue.Id}>
+                <TableCell>
+                  <LinkComp href={`/issues/${issue.Id}`}>
+                    {issue.title}{" "}
+                    <div className="block md:hidden">
+                      <IssueStatusBadge status={issue.status} />
+                    </div>
+                  </LinkComp>
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  <IssueStatusBadge status={issue.status} />
+                </TableCell>
+                <TableCell>{issue?.userName || "unassigned"}</TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {issue.createdAt.toDateString()}
+                </TableCell>
+                <TableCell className="hidden md:table-cell">
+                  {issue.dateCompleted ? (
+                    issue.dateCompleted.toDateString()
+                  ) : (
+                    <span>Pending</span>
+                  )}
+                </TableCell>
+                <TableCell className="flex gap-2 h-4 items-center">
+                  <Link href={`/issues/edit/${issue.Id}`}>
+                    <EditIssueBtn />
+                  </Link>
+                  <DeleteIssueBtn id={issue.Id} />
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table.Root>
         <Pagination

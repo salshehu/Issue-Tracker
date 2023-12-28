@@ -1,7 +1,6 @@
 "use client";
 import { Status } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
-import { stat } from "fs";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
 
@@ -33,7 +32,7 @@ const IssueStatusFIlter = () => {
           if (searchParams.get("orderBy"))
             params.append("orderBy", searchParams.get("orderBy")!);
           const query = params.size ? "?" + params.toString() : "";
-          router.push("/issues/lists" + query);
+          router.push("/issues" + query);
         }}
         defaultValue={searchParams.get("status") || ""}
         size="1"

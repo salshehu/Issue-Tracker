@@ -4,7 +4,7 @@ import { z } from "zod";
 import { DevsSchema } from "@/_lib/schemaValidation";
 
 export async function GET(request: NextRequest) {
-  const res = await prisma.devs.findMany();
+  const res = await prisma.developers.findMany();
 
   if (!res) NextResponse.json("No record found", { status: 404 });
 
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
   if (!checkdev.success)
     return NextResponse.json("Invalid entries", { status: 400 });
 
-  const newDev = await prisma.devs.create({
+  const newDev = await prisma.developers.create({
     data: {
       userName: checkdev.data.userName,
       firstName: checkdev.data.firstName,

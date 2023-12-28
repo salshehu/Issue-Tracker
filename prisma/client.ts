@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 
 const prismaClientSingleTon = () => {
-  return new PrismaClient();
+  return new PrismaClient(); // return new PrismaClient({ log: ["query"] });
 };
 
 type PrismaClientSingleTon = ReturnType<typeof prismaClientSingleTon>;
