@@ -12,7 +12,7 @@ interface Props {
 async function getIssue({ id }: { id: string }) {
   try {
     const issue = await prisma.issue.findUnique({
-      where: { id: parseInt(id) },
+      where: { Id: parseInt(id) },
     });
 
     if (!issue) throw new Error();
@@ -60,11 +60,11 @@ const IssueDetailsPage = async ({ params }: Props) => {
           gap={"3"}
           className="flex-row justify-end md:flex-col  mx-3 mt-3 "
         >
-          <LinkComp href={`/issues/edit/${issue.id}`}>
+          <LinkComp href={`/issues/edit/${issue.Id}`}>
             <EditIssueBtn />
           </LinkComp>
 
-          <DeleteIssueBtn id={issue.id} />
+          <DeleteIssueBtn id={issue.Id} />
         </Flex>
       </Box>
     </Grid>

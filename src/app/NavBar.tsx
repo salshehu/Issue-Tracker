@@ -47,7 +47,8 @@ const NavLinks = () => {
     { id: 1, label: "Home", href: "/" },
     { id: 2, label: "Dashboard", href: "/dashboard" },
     { id: 3, label: "Issues", href: "/issues" },
-    { id: 4, label: "About", href: "/info" },
+    { id: 4, label: "Developers", href: "/dlopers" },
+    { id: 5, label: "About", href: "/info" },
   ];
 
   return (

@@ -1,4 +1,5 @@
 import {
+  Heading,
   Table,
   TableBody,
   TableCell,
@@ -20,7 +21,12 @@ import Pagination from "@/_components/Pagination";
 import { equal } from "assert";
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Entries; page: string };
+  searchParams: {
+    status: Status;
+    orderBy: keyof Entries;
+    page: string;
+    q: string;
+  };
 }
 
 interface Entries {
@@ -63,6 +69,8 @@ const Issues = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: "asc" }
     : undefined;
 
+  console.log(searchParams.q);
+
   // set-up pagination
   const page = +searchParams.page || 1;
   const pageSize: number = 7;
@@ -94,81 +102,105 @@ const Issues = async ({ searchParams }: Props) => {
   const entries = await prisma.issueView.findMany({
     where: {
       status,
+      AND: [
+        {
+          title: {
+            search: searchParams.q,
+          },
+        },
+      ],
     },
+
     orderBy,
     skip: (page - 1) * pageSize,
     take: pageSize,
   });
 
-  const issueCount = await prisma.issue.count({ where: { status } });
+  const issueCount = await prisma.issue.count({
+    where: {
+      status,
+      AND: [
+        {
+          title: {
+            search: searchParams.q,
+          },
+        },
+      ],
+    },
+  });
 
   return (
     <div className="m-auto p-5 ">
+      <Heading as="h3">Issue List</Heading>
       <IssuesTopBar />
-      <div className="my-3">
-        <Table.Root variant="surface">
-          <TableHeader>
-            <TableRow>
-              {columnsHeaders.map((h) => (
-                <TableColumnHeaderCell key={h.value} className={h.className}>
-                  <div className="flex gap-1 items-center">
-                    {h.value === searchParams.orderBy && (
-                      <BsChevronUp className="inline ml-1" />
-                    )}
-                    <Link
-                      href={{ query: { ...searchParams, orderBy: h.value } }}
-                    >
-                      {h.label !== "Status" && h.label}
-                      {h.label === "Status" && h.label}
-                      {h.label === "Status" && <IssueStatusFIlter />}
-                    </Link>
-                  </div>
-                </TableColumnHeaderCell>
-              ))}
-              <TableColumnHeaderCell></TableColumnHeaderCell>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {entries.map((issue) => (
-              <TableRow key={issue.Id}>
-                <TableCell>
-                  <LinkComp href={`/issues/${issue.Id}`}>
-                    {issue.title}{" "}
-                    <div className="block md:hidden">
-                      <IssueStatusBadge status={issue.status} />
+      {entries.length > 0 ? (
+        <div className="my-3">
+          <Table.Root variant="surface">
+            <TableHeader>
+              <TableRow>
+                {columnsHeaders.map((h) => (
+                  <TableColumnHeaderCell key={h.value} className={h.className}>
+                    <div className="flex gap-1 items-center">
+                      {h.value === searchParams.orderBy && (
+                        <BsChevronUp className="inline ml-1" />
+                      )}
+                      <Link
+                        href={{ query: { ...searchParams, orderBy: h.value } }}
+                      >
+                        {h.label !== "Status" && h.label}
+                        {h.label === "Status" && h.label}
+                        {h.label === "Status" && <IssueStatusFIlter />}
+                      </Link>
                     </div>
-                  </LinkComp>
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  <IssueStatusBadge status={issue.status} />
-                </TableCell>
-                <TableCell>{issue?.userName || "unassigned"}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {issue.createdAt.toDateString()}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {issue.dateCompleted ? (
-                    issue.dateCompleted.toDateString()
-                  ) : (
-                    <span>Pending</span>
-                  )}
-                </TableCell>
-                <TableCell className="flex gap-2 h-4 items-center">
-                  <Link href={`/issues/edit/${issue.Id}`}>
-                    <EditIssueBtn />
-                  </Link>
-                  <DeleteIssueBtn id={issue.Id} />
-                </TableCell>
+                  </TableColumnHeaderCell>
+                ))}
+                <TableColumnHeaderCell></TableColumnHeaderCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table.Root>
-        <Pagination
-          currentPage={page}
-          itemsCount={issueCount}
-          pageSize={pageSize}
-        />
-      </div>
+            </TableHeader>
+            <TableBody>
+              {entries.map((issue) => (
+                <TableRow key={issue.Id}>
+                  <TableCell>
+                    <LinkComp href={`/issues/${issue.Id}`}>
+                      {issue.title}{" "}
+                      <div className="block md:hidden">
+                        <IssueStatusBadge status={issue.status} />
+                      </div>
+                    </LinkComp>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <IssueStatusBadge status={issue.status} />
+                  </TableCell>
+                  <TableCell>{issue?.userName || "unassigned"}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {issue.createdAt.toDateString()}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {issue.dateCompleted ? (
+                      issue.dateCompleted.toDateString()
+                    ) : (
+                      <span>Pending</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="flex gap-2 h-4 items-center">
+                    <Link href={`/issues/edit/${issue.Id}`}>
+                      <EditIssueBtn />
+                    </Link>
+                    <DeleteIssueBtn id={issue.Id} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table.Root>
+          <Pagination
+            currentPage={page}
+            itemsCount={issueCount}
+            pageSize={pageSize}
+          />
+        </div>
+      ) : (
+        <Heading as="h5">No Such Records of this Search was Found</Heading>
+      )}
     </div>
   );
 };
