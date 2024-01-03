@@ -4,6 +4,7 @@ import { Spinner } from "@/_components";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 import { BsTrash } from "react-icons/bs";
 
 const DeleteIssueBtn = ({ id }: { id: number }) => {
@@ -19,6 +20,9 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
         method: "DELETE",
       });
       if (!res.ok) return setErr(true);
+      toast.success("Issue was successfully deleted", {
+        position: "bottom-right",
+      });
       router.push("/issues");
       router.refresh();
     } catch (error) {
@@ -91,6 +95,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>
+      <Toaster />
     </>
   );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import prisma from "../../../../prisma/client";
 import {
   Avatar,
@@ -8,10 +7,13 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Tabs,
   Text,
 } from "@radix-ui/themes";
 import Image from "next/image";
+import no_avatar from "../../../../public/no_avatar.png";
 import { BsFacebook, BsPerson, BsTwitterX } from "react-icons/bs";
+import Devtabs from "./Devtabs";
 
 interface Props {
   params: { id: string };
@@ -25,33 +27,39 @@ const page = async ({ params }: Props) => {
   return (
     <div>
       <Heading>{dev?.lastName} Personal Info</Heading>
-      <div>
-        <Flex justify={"between"}>
-          <Box className="flex-col items-start m-4">
-            <Avatar
-              src={dev?.profilePic || "./no_avatar.png"}
-              fallback={<BsPerson size={"93"} />}
-              size="9"
-              radius="medium"
-              className="inline-block "
-            />
-            <span className="block m-2 pl-1 text-lg font-bold text-green-900 ">
-              Full Stack Developer
-            </span>
-          </Box>
-          <Flex mt={"6"} align={"end"} direction={"column"}>
-            <Flex gap={"2"} align={"center"}>
-              <BsFacebook />
-              {dev?.userName}
-            </Flex>
-            <Flex gap={"2"} align={"center"}>
-              <BsTwitterX />
-              {dev?.userName}
-            </Flex>
+      {dev ? (
+        <div>
+          <Flex justify={"between"}>
+            <Box className="flex-col items-start m-4">
+              <Image
+                src={dev?.profilePic || no_avatar}
+                // className="inline-block object-fill w-auto h-auto "
+                width={200}
+                height={350}
+                alt="developer image"
+                placeholder="blur"
+              />
+
+              <Flex mt={"2"} align={"center"} gap={"3"}>
+                <Flex gap={"2"} align={"center"}>
+                  <BsFacebook />
+                  {dev?.userName}
+                </Flex>
+                <Flex gap={"2"} align={"center"}>
+                  <BsTwitterX />
+                  {dev?.userName}
+                </Flex>
+              </Flex>
+            </Box>
           </Flex>
-        </Flex>
-        <div></div>
-      </div>
+          <Devtabs dev={dev} />
+        </div>
+      ) : (
+        <Text>
+          Couldn't load developer's detail, something must have gone wrong
+          somewhere along the line.
+        </Text>
+      )}
     </div>
   );
 };

@@ -10,10 +10,10 @@ export async function POST(request: NextRequest) {
   if (!checkvalid.success)
     return NextResponse.json(checkvalid.error.errors, { status: 400 });
 
-  const { title, description, status } = checkvalid.data;
+  const { title, description, status, devId, dateCompleted } = checkvalid.data;
 
   const newissue = await prisma.issue.create({
-    data: { title, description, status },
+    data: { title, description, status, devId, dateCompleted },
   });
 
   return NextResponse.json(newissue, { status: 201 });

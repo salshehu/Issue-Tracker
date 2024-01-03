@@ -3,10 +3,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="items-center justify-center text-sm">
+    <footer className="items-center content-between text-sm">
       <span>
         <span>&copy;</span>
-        <Link href="/" className="text-blue-600 m-1">
+        <Link href="/" className="text-violet-600 ml-1 mr-5">
           Symbiotic Bug Tracker Inc.
         </Link>
       </span>

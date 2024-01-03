@@ -69,8 +69,6 @@ const Issues = async ({ searchParams }: Props) => {
     ? { [searchParams.orderBy]: "asc" }
     : undefined;
 
-  console.log(searchParams.q);
-
   // set-up pagination
   const page = +searchParams.page || 1;
   const pageSize: number = 7;
@@ -104,9 +102,13 @@ const Issues = async ({ searchParams }: Props) => {
       status,
       AND: [
         {
-          title: {
-            search: searchParams.q,
-          },
+          OR: [
+            {
+              title: {
+                search: searchParams.q,
+              },
+            },
+          ],
         },
       ],
     },
@@ -182,7 +184,7 @@ const Issues = async ({ searchParams }: Props) => {
                       <span>Pending</span>
                     )}
                   </TableCell>
-                  <TableCell className="flex gap-2 h-4 items-center">
+                  <TableCell className="flex gap-2 items-center p-1">
                     <Link href={`/issues/edit/${issue.Id}`}>
                       <EditIssueBtn />
                     </Link>

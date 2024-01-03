@@ -1,14 +1,14 @@
 "use client";
 import ErrorMessage from "@/_components/ErrorMessage";
 import Spinner from "@/_components/Spinner";
-import { Issueschema } from "@/_lib/schemaValidation";
+import { IssueSchema } from "@/_lib/schemaValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Developers, Issue, Status } from "@prisma/client";
 import { Button, Select, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import SimpleMde from "react-simplemde-editor";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import DeleteIssueBtn from "../[id]/DeleteIssueBtn";
@@ -25,7 +25,7 @@ import { useQuery } from "@tanstack/react-query";
 //   description: string;
 // }
 
-type IssueFormData = z.infer<typeof Issueschema>;
+type IssueFormData = z.infer<typeof IssueSchema>;
 
 const IssueForm = ({ issue }: { issue?: Issue }) => {
   const route = useRouter();
@@ -37,7 +37,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(Issueschema),
+    resolver: zodResolver(IssueSchema),
   });
 
   //fetch developers
@@ -52,7 +52,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
         .then((res) => res.json())
         .catch((e) => console.log(e)),
     retry: 3,
-    staleTime: 60 * 1000, //list of entries will be cached for 60s i.e. 1mins
+    staleTime: 60 * 1000, //list of entries will be cached for 60s i.e. 1min
   });
 
   //list of possible statuses
@@ -60,17 +60,19 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   //final form submission handler
   const submitForm = handleSubmit(async (data) => {
-    console.log(data);
-
     try {
       setIsSending(true);
       let res;
 
       if (issue) {
-        res = await fetch("/api/issues/" + issue.id, {
+        res = await fetch("/api/issues/" + issue.Id, {
           method: "PATCH",
           headers: { "Content-Type": "Application/json" },
           body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error("Sorry, unable to post data");
+        toast.success("Issue was successfully updated ", {
+          position: "top-right",
         });
       } else {
         res = await fetch("/api/issues", {
@@ -78,25 +80,31 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           headers: { "Content-Type": "Application/json" },
           body: JSON.stringify(data),
         });
-      }
 
-      if (!res.ok) return new Error("entries are invalid");
+        if (!res.ok) throw new Error("Sorry, update operation failed");
+        toast.success("Issue was saved successfully", {
+          position: "top-right",
+        });
+      }
 
       route.push("/issues");
       route.refresh();
     } catch (err) {
       setIsSending(false);
       setError(`Something went wrong, ${err}`);
-      toast.error("something went wrong");
+      toast.error("something went wrong!", { position: "top-right" });
       console.log(err);
     }
   });
 
-  const devUserName = (issue: Issue) => {
-    const selectDev = devs?.find((dev) => dev.id === issue?.devId);
+  // const dloper =
+  //   // issue?.devId &&
+  //   devs?.find((dev) => {
+  //     dev.Id === issue.devId;
+  //     return dev.userName;
+  //   });
 
-    return selectDev?.userName;
-  };
+  const developer = devs?.find((dev) => dev.Id === issue?.devId);
 
   return (
     <form className="max-w-2xl p-5 space-y-3" onSubmit={submitForm}>
@@ -122,9 +130,12 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
       <div className="flex gap-2 justify-around">
         <>
           <select {...register("status")} placeholder="Status">
+            <option defaultValue={issue?.status || "OPEN"}>
+              {issue?.status || "Set Status.."}
+            </option>
             {status?.map((st) => (
-              <option key={st} value={st} defaultValue={issue?.status || st}>
-                {issue ? issue?.status : st}
+              <option key={st} value={st}>
+                {st}
               </option>
             ))}
           </select>
@@ -132,15 +143,13 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
           <ErrorMessage>{errors.status?.message}</ErrorMessage>
         </>
         <>
-          <select {...register("devId")} placeholder="Assign Issue...">
-            <option>unassigned</option>
+          <select {...register("devId")}>
+            <option value={developer?.Id || undefined}>
+              {developer?.userName || "Assign Issue..."}
+            </option>
             {devs?.map((dev) => (
-              <option
-                key={dev.id}
-                value={issue?.devId || dev.id}
-                defaultValue={issue?.devId ? devUserName(issue) : "null"}
-              >
-                {dev.userName || "unassigned"}
+              <option key={dev.Id} value={dev.Id}>
+                {dev.userName}
               </option>
             ))}
           </select>
@@ -159,11 +168,14 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             "Submit Issue"
           )}
         </Button>
-        <DeleteIssueBtn id={issue?.id!} />
+        <DeleteIssueBtn id={issue?.Id!} />
         <Button onClick={() => route.back()}>Cancel</Button>
       </div>
+      <Toaster />
     </form>
   );
 };
 
 export default IssueForm;
+
+// text={issue ? "Updating..." : "Submitting..."}

@@ -4,6 +4,7 @@ SELECT
   i.status,
   i."dateCompleted",
   i."createdAt",
+  i."description",
   d."userName"
 FROM
   (

@@ -13,8 +13,6 @@ const SearchBox = () => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
 
-  console.log(qref);
-
   const handleSearch = useDebouncedCallback(() => {
     const qry = qref.current?.value;
     if (qry) {

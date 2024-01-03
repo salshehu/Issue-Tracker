@@ -8,7 +8,7 @@ export const IssueSchema = z.object({
   title: z.string().min(3, "Title must 3 chars long").max(255),
   description: z.string().min(1, "description can not be empty").max(65535),
   status: z.enum(status).optional(),
-  devId: z.string().optional(),
+  devId: z.string().min(1, "Kindly assign to a developer").max(255),
   dateCompleted: z.coerce.date().optional().nullable().default(null),
 });
 

@@ -27,12 +27,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} px-2 `}>
+      <body className={`${inter.variable} px-2 m-auto`}>
         <QueryClientProvider>
           <AuthProvider>
             <Theme appearance="light" accentColor="iris" radius="large">
               <NavBar />
-              <main className="">{children}</main>
+              <main className="min-h-screen">{children}</main>
               <Footer />
             </Theme>
           </AuthProvider>

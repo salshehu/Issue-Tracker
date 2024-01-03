@@ -8,6 +8,14 @@ const nextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pixabay.com",
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;
