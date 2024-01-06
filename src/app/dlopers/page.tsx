@@ -1,4 +1,5 @@
 import {
+  Button,
   Heading,
   Table,
   TableBody,
@@ -60,8 +61,13 @@ const page = async ({ searchParams }: Props) => {
   const devCount = await prisma.developers.count();
 
   return (
-    <div className="p-2">
+    <div className="p-2 m-3">
       <Heading className="my-12">List of Available Developers</Heading>
+      <div className="flex justify-end items-end">
+        <Button>
+          <Link href={"/dlopers/new"}>Add New</Link>
+        </Button>
+      </div>
       <Table.Root>
         <TableHeader>
           {listHeaders.map((colhead) => (

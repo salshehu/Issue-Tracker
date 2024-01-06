@@ -83,7 +83,7 @@ const LoginPage = () => {
         </div>
         <span className="my-3 text-sm text-right text-gray-500 self-end">
           Don't have an account?
-          <Link href="/login/register" className="bold text-blue-800 italic">
+          <Link href="/login/register" className="bold text-red-800 italic">
             {" "}
             Click here{" "}
           </Link>{" "}

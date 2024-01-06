@@ -1,43 +1,42 @@
 import prisma from "../../../../prisma/client";
-import {
-  Avatar,
-  Box,
-  Flex,
-  Heading,
-  TableBody,
-  TableCell,
-  TableRow,
-  Tabs,
-  Text,
-} from "@radix-ui/themes";
+import { Box, Button, Container, Flex, Heading, Text } from "@radix-ui/themes";
 import Image from "next/image";
 import no_avatar from "../../../../public/no_avatar.png";
-import { BsFacebook, BsPerson, BsTwitterX } from "react-icons/bs";
+import { BsFacebook, BsPen, BsTwitterX } from "react-icons/bs";
 import Devtabs from "./Devtabs";
+import Link from "next/link";
+import DevChart from "../_components/DevChart";
+import IssueSummary from "@/app/dashboard/IssueSummary";
 
 interface Props {
   params: { id: string };
 }
 
 const page = async ({ params }: Props) => {
-  const dev = await prisma.developers.findUnique({
-    where: { Id: params.id },
+  const dev = await prisma.developers.findUnique({ where: { Id: params.id } });
+  const open = await prisma.issue.count({
+    where: { devId: params.id, status: "OPEN" },
+  });
+  const inProgress = await prisma.issue.count({
+    where: { devId: params.id, status: "IN_PROGRESS" },
+  });
+  const closed = await prisma.issue.count({
+    where: { devId: params.id, status: "CLOSED" },
   });
 
   return (
-    <div>
+    <Container>
       <Heading>{dev?.lastName} Personal Info</Heading>
       {dev ? (
         <div>
-          <Flex justify={"between"}>
+          <Flex className="items-center justify-center block md:flex md:justify-between ">
             <Box className="flex-col items-start m-4">
               <Image
                 src={dev?.profilePic || no_avatar}
-                // className="inline-block object-fill w-auto h-auto "
+                className="inline-block object-fill w-auto h-auto "
                 width={200}
                 height={350}
                 alt="developer image"
-                placeholder="blur"
               />
 
               <Flex mt={"2"} align={"center"} gap={"3"}>
@@ -51,6 +50,14 @@ const page = async ({ params }: Props) => {
                 </Flex>
               </Flex>
             </Box>
+            <Box className="flex-col md:flex items-center justify-center">
+              <DevChart open={open} inProgress={inProgress} closed={closed} />
+              <IssueSummary
+                open={open}
+                inProgress={inProgress}
+                closed={closed}
+              />
+            </Box>
           </Flex>
           <Devtabs dev={dev} />
         </div>
@@ -60,7 +67,7 @@ const page = async ({ params }: Props) => {
           somewhere along the line.
         </Text>
       )}
-    </div>
+    </Container>
   );
 };
 

@@ -4,9 +4,9 @@ import prisma from "../../../../../prisma/client";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: { Id: string } }
 ) {
-  const dev = await prisma.developers.findUnique({ where: { Id: params.id } });
+  const dev = await prisma.developers.findUnique({ where: { Id: params.Id } });
 
   if (!dev) return NextResponse.json("Record not found", { status: 404 });
 

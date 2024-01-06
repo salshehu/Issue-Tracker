@@ -16,6 +16,10 @@
   }
 }
 
-/* input {
-  @apply;
-} */
+.inputDevForm {
+  @apply p-2 m-2 text-violet-500;
+}
+
+.labelDevForm {
+  @apply block p-1;
+}

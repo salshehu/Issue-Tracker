@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import prisma from "../../../../prisma/client";
 import DeleteIssueBtn from "./DeleteIssueBtn";
 import EditIssueBtn from "../_components/EditIssueBtn";
+import ReactMarkdown from "react-markdown";
 
 interface Props {
   params: { id: string };
@@ -50,7 +51,9 @@ const IssueDetailsPage = async ({ params }: Props) => {
           <small>{issue.createdAt.toDateString()}</small>
           <div className=" space-x-2 my-3">
             <Text as="div" className="mb-7">
-              {issue.description}
+              <ReactMarkdown className=" prose">
+                {issue.description}
+              </ReactMarkdown>
             </Text>
           </div>
         </Card>
