@@ -59,7 +59,6 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
             </AlertDialog.Cancel>
             <AlertDialog.Action>
               <Button color="orange" variant="surface" onClick={deleteHandler}>
-                {" "}
                 Delete
               </Button>
             </AlertDialog.Action>
@@ -70,8 +69,8 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
         <AlertDialog.Content>
           <AlertDialog.Title>Error deleting issue</AlertDialog.Title>
           <AlertDialog.Description>
-            Oops! Couldn't delete issue, something went wrong along the way. Try
-            again.
+            Oops! Couldn&apos;t delete issue, something went wrong along the
+            way. Try again.
           </AlertDialog.Description>
           <Flex gap={"3"} align={"center"} mt={"2"}>
             <AlertDialog.Action>

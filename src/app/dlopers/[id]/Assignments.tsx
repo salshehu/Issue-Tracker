@@ -53,7 +53,7 @@ export const Assignments = ({ dev }: Props) => {
     };
 
     getDevlist();
-  }, []);
+  }, [dev.Id]);
 
   return (
     <Flex className="">
@@ -66,7 +66,7 @@ export const Assignments = ({ dev }: Props) => {
             <TableColumnHeaderCell>Description</TableColumnHeaderCell>
           </TableHeader>
           <TableBody>
-            {assignments[0].map((data, index) => (
+            {assignments[0].map((data: any, index: any) => (
               <TableRow key={index}>
                 <TableCell className="font-medium">
                   <LinkComp href={`/issues/${data.Id}`}>{data.Id}</LinkComp>

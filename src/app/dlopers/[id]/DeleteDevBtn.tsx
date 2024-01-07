@@ -62,7 +62,6 @@ const DeleteDevBtn = ({ id }: { id: string }) => {
             </AlertDialog.Cancel>
             <AlertDialog.Action>
               <Button color="orange" variant="surface" onClick={deleteHandler}>
-                {" "}
                 Delete
               </Button>
             </AlertDialog.Action>
@@ -73,8 +72,8 @@ const DeleteDevBtn = ({ id }: { id: string }) => {
         <AlertDialog.Content>
           <AlertDialog.Title>Error deleting Profile</AlertDialog.Title>
           <AlertDialog.Description>
-            Oops! Couldn't delete developer, something went wrong along the way.
-            Try again.
+            Oops! Couldn&apos;t delete developer, something went wrong along the
+            way. Try again.
           </AlertDialog.Description>
           <Flex gap={"3"} align={"center"} mt={"2"}>
             <AlertDialog.Action>

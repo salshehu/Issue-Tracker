@@ -86,7 +86,7 @@ const LoginPage = () => {
           </Button>
         </div>
         <span className="my-3 text-sm text-right text-gray-500 self-end">
-          Don't have an account?
+          Don&apos;t have an account?
           <Link href="/login/register" className="bold text-red-800 italic">
             {" "}
             Click here to Register.

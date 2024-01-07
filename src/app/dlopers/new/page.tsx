@@ -13,7 +13,7 @@ const newDevPage = async () => {
   return (
     <div className=" flex flex-col items-center justify-center gap-10">
       <Heading className="text-violet-700">
-        Developer's Personal Details
+        Developer&apos;s Personal Details
       </Heading>
 
       <DevForm />

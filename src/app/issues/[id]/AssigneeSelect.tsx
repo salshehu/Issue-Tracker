@@ -22,14 +22,10 @@ const AssigneeSelect = ({ id }: { id: number }) => {
           <Select.Group>
             <Select.Label>Suggestions</Select.Label>
             <Select.Item key="" value="unassigned">
-              "Unassigned"
+              Unassigned
             </Select.Item>
-            {devs?.map((dev) => (
-              <Select.Item
-                key={dev.id}
-                value={dev.id}
-                defaultValue={id ? dev.userName : "unassigned"}
-              >
+            {devs?.map((dev, index) => (
+              <Select.Item key={index} value={dev.Id}>
                 {dev.userName}
               </Select.Item>
             ))}

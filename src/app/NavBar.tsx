@@ -11,6 +11,7 @@ import {
   DropdownMenuRoot,
   DropdownMenuTrigger,
   Flex,
+  Select,
   Text,
 } from "@radix-ui/themes";
 import { getServerSession } from "next-auth";
@@ -91,14 +92,16 @@ const AuthStatus = () => {
 
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Avatar
-            src={session!.user?.image!}
-            fallback={<BsPerson />}
-            size="2"
-            radius="full"
-            referrerPolicy="no-referrer"
-            className="cursor-pointer"
-          />
+          <Text>
+            <Avatar
+              src={session!.user?.image!}
+              fallback={<BsPerson />}
+              size="2"
+              radius="full"
+              referrerPolicy="no-referrer"
+              className="cursor-pointer"
+            />
+          </Text>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content color="indigo" className="border-blue-400">
           <DropdownMenu.Label>
@@ -114,3 +117,24 @@ const AuthStatus = () => {
 };
 
 export default NavBar;
+
+//  <Select.Root>
+//    <Select.Trigger>
+//      <Avatar
+//        src={session!.user?.image!}
+//        fallback={<BsPerson />}
+//        size="2"
+//        radius="full"
+//        referrerPolicy="no-referrer"
+//        className="cursor-pointer"
+//      />
+//    </Select.Trigger>
+//    <Select.Content>
+//      <Select.Group>
+//        <Select.Label>{session?.user?.email}</Select.Label>
+//      </Select.Group>
+//      <Select.Item value="/api/auth/signout">
+//        <Link href="/api/auth/signout">Sign Out</Link>
+//      </Select.Item>
+//    </Select.Content>
+//  </Select.Root>;

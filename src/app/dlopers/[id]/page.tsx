@@ -70,8 +70,8 @@ const page = async ({ params }: Props) => {
         </div>
       ) : (
         <Text>
-          Couldn't load developer's detail, something must have gone wrong
-          somewhere along the line.
+          Couldn&apos;t load developer&apos;s detail, something must have gone
+          wrong somewhere along the line.
         </Text>
       )}
     </Container>
