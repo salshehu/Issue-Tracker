@@ -53,16 +53,14 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const delDate = await request.json();
-
-  const searchDate = await prisma.developers.findUnique({
+  const searchData = await prisma.developers.findUnique({
     where: { Id: params.id },
   });
 
-  if (!searchDate)
+  if (!searchData)
     return NextResponse.json("No such record exists", { status: 404 });
 
   const res = await prisma.developers.delete({ where: { Id: params.id } });
 
-  return NextResponse.json({ action: "delete", mssg: res });
+  return NextResponse.json({ action: "delete succesfull", mssg: res });
 }

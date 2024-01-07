@@ -7,7 +7,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import { RegisterFormSchema } from "@/_lib/schemaValidation";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 type formSchema = z.infer<typeof RegisterFormSchema>;
 
@@ -21,6 +22,10 @@ const RegisterPage = () => {
     formState: { errors },
   } = useForm<formSchema>({ resolver: zodResolver(RegisterFormSchema) });
   const router = useRouter();
+
+  // validate session
+  const { data: session } = useSession();
+  if (session) redirect("/dashboard");
 
   const onSubmit = async (data: FieldValues) => {
     if (data.password1 !== data.password2) {

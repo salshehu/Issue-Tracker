@@ -1,10 +1,12 @@
 import { IssueStatusBadge, LinkComp } from "@/_components";
 import { Box, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import prisma from "../../../../prisma/client";
 import DeleteIssueBtn from "./DeleteIssueBtn";
 import EditIssueBtn from "../_components/EditIssueBtn";
 import ReactMarkdown from "react-markdown";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
 
 interface Props {
   params: { id: string };
@@ -32,6 +34,10 @@ export async function generateMetadata({ params }: Props) {
 }
 
 const IssueDetailsPage = async ({ params }: Props) => {
+  // validat session
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
+
   const issue = await getIssue(params);
 
   if (!issue) notFound();

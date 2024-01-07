@@ -1,6 +1,9 @@
 import React from "react";
 import dynamic from "next/dynamic";
 import LoadingFormSkeleton from "./loading";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
+import { redirect } from "next/navigation";
 
 // lazy loader fn to load entire form dynamically
 const IssueForm = dynamic(() => import("../_components/IssueForm"), {
@@ -8,7 +11,9 @@ const IssueForm = dynamic(() => import("../_components/IssueForm"), {
   loading: () => <LoadingFormSkeleton />,
 });
 
-const NewIssuePage = () => {
+const NewIssuePage = async () => {
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
   return <IssueForm />;
 };
 

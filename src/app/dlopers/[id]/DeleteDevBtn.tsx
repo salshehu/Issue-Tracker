@@ -7,24 +7,27 @@ import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { BsTrash } from "react-icons/bs";
 
-const DeleteIssueBtn = ({ id }: { id: number }) => {
+const DeleteDevBtn = ({ id }: { id: string }) => {
   const router = useRouter();
 
   const [err, setErr] = useState(false);
   const [isDeleting, setisDeleting] = useState(false);
 
   const deleteHandler = async () => {
+    console.log(id);
+
     try {
       setisDeleting(true);
-      const res = await fetch(`/api/issues/${id}`, {
+      const res = await fetch(`/api/devs/${id}`, {
         method: "DELETE",
       });
-      if (!res.ok)
-        throw new Error("Sorry! Server couldn't process your request");
-      toast.success("Issue was successfully deleted", {
+
+      console.log(res);
+      if (!res.ok) throw new Error("Sorry!, server error prevented this");
+      toast.success("Profile was successfully deleted", {
         position: "bottom-right",
       });
-      router.push("/issues");
+      router.push("/dlopers");
       router.refresh();
     } catch (error) {
       setErr(true);
@@ -68,10 +71,10 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
       </AlertDialog.Root>
       <AlertDialog.Root open={err}>
         <AlertDialog.Content>
-          <AlertDialog.Title>Error deleting issue</AlertDialog.Title>
+          <AlertDialog.Title>Error deleting Profile</AlertDialog.Title>
           <AlertDialog.Description>
-            Oops! Couldn't delete issue, something went wrong along the way. Try
-            again.
+            Oops! Couldn't delete developer, something went wrong along the way.
+            Try again.
           </AlertDialog.Description>
           <Flex gap={"3"} align={"center"} mt={"2"}>
             <AlertDialog.Action>
@@ -88,7 +91,7 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
               <Button
                 color="red"
                 variant="surface"
-                onClick={() => router.push("/issues")}
+                onClick={() => router.push("/dlopers")}
               >
                 Cancel
               </Button>
@@ -101,4 +104,4 @@ const DeleteIssueBtn = ({ id }: { id: number }) => {
   );
 };
 
-export default DeleteIssueBtn;
+export default DeleteDevBtn;

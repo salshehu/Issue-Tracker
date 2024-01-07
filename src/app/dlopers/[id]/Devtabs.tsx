@@ -4,6 +4,7 @@ import { Flex, Tabs, Box, Text, Button, Link } from "@radix-ui/themes";
 import React from "react";
 import { Assignments } from "./Assignments";
 import { BsPen } from "react-icons/bs";
+import DeleteDevBtn from "./DeleteDevBtn";
 
 interface Prop {
   dev: Developers;
@@ -83,14 +84,17 @@ const Profile = ({ dev }: Prop) => {
           </div>
         </Flex>
       </Flex>
-      <Button className=" m-3">
-        <Link
-          href={"/dlopers/new/" + dev.Id}
-          className="flex items-center gap-1 text-white"
-        >
-          <BsPen /> Edit
-        </Link>
-      </Button>
+      <span className=" flex gap-3 m-3 align-middle">
+        <Button>
+          <Link
+            href={"/dlopers/new/" + dev.Id}
+            className="flex items-center gap-1 text-white"
+          >
+            <BsPen /> Update
+          </Link>
+        </Button>
+        <DeleteDevBtn id={dev.Id} />
+      </span>
     </div>
   );
 };

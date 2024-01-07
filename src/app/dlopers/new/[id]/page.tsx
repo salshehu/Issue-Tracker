@@ -1,6 +1,8 @@
 import dynamic from "next/dynamic";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import prisma from "../../../../../prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
 
 interface Props {
   params: { id: string };
@@ -13,7 +15,9 @@ const DevForm = dynamic(() => import("../../_components/DevForm"), {
 });
 
 const EditDevPage = async ({ params }: Props) => {
-  console.log(params.id);
+  //validate seesion
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
 
   const dev = await prisma.developers.findUnique({
     where: { Id: params.id },

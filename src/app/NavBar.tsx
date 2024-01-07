@@ -6,6 +6,10 @@ import {
   Box,
   Button,
   DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRoot,
+  DropdownMenuTrigger,
   Flex,
   Text,
 } from "@radix-ui/themes";
@@ -15,7 +19,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { AiFillBug } from "react-icons/ai";
-import { authOptions } from "./api/auth/[...nextauth]/route";
+import { authOptions } from "../_lib/authOptions";
 import { BsPerson } from "react-icons/bs";
 
 const NavBar = () => {
@@ -25,14 +29,14 @@ const NavBar = () => {
   return (
     <nav className="flex justify-between border-b p-3  h-14 mb-5 mt-2 ">
       <Flex className="items-center justify-center">
-        <Flex className="flex-col place-items-center me-7 bg-slate-200">
-          <Link href="/" className="place-items-center mt-2 p-2 ">
-            <div className="">
-              <AiFillBug size="27" color="brown" />
-            </div>
-            <p className="font-semibold text-center text-sm">Symbiotic</p>
-          </Link>
-        </Flex>
+        <Link
+          href="/"
+          className="hidden md:inline-block items-center justify-center mt-2 p-2 "
+        >
+          <AiFillBug size="27" color="brown" />
+
+          <p className="font-semibold text-center text-sm">Symbiotic</p>
+        </Link>
         <NavLinks />
       </Flex>
       <AuthStatus />
@@ -80,7 +84,11 @@ const AuthStatus = () => {
   if (status === "unauthenticated") return <Link href="/login">Sign In</Link>;
 
   return (
-    <Box className="items-center justify-center">
+    <Box className="flex items-center justify-center">
+      {status === "authenticated" && (
+        <Text className=" hidden md:inline m-2">{session?.user?.name}</Text>
+      )}
+
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
           <Avatar

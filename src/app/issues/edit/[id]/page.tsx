@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import LoadingFormSkeleton from "../../_components/IssueFormSkel";
 import prisma from "../../../../../prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
 
 interface Props {
   params: { id: string };
@@ -14,6 +16,10 @@ const IssueForm = dynamic(() => import("../../_components/IssueForm"), {
 });
 
 const EditIssuePage = async ({ params }: Props) => {
+  // Validate session
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
+
   const issue = await prisma.issue.findUnique({
     where: { Id: parseInt(params.id) },
   });

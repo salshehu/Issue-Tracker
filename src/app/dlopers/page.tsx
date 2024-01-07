@@ -15,6 +15,9 @@ import Pagination from "@/_components/Pagination";
 import { Contract } from "@prisma/client";
 import Link from "next/link";
 import { BsArrowUp } from "react-icons/bs";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
+import { redirect } from "next/navigation";
 
 interface Props {
   searchParams: {
@@ -44,6 +47,10 @@ const listHeaders: {
 ];
 
 const page = async ({ searchParams }: Props) => {
+  // validate session
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
+
   const page = +searchParams.page || 1;
   const pageSize: number = 10;
 

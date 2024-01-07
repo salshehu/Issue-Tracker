@@ -19,6 +19,9 @@ import { Issue, Status } from "@prisma/client";
 import { BsChevronUp } from "react-icons/bs";
 import Pagination from "@/_components/Pagination";
 import { equal } from "assert";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
+import { redirect } from "next/navigation";
 
 interface Props {
   searchParams: {
@@ -57,6 +60,12 @@ const columnsHeaders: {
 
 const Issues = async ({ searchParams }: Props) => {
   //********************** */
+
+  // check if user is validated
+  const session = await getServerSession(authOptions);
+
+  if (!session) redirect("/login");
+
   // validate query paramater received before passing to prisma
   const statusCheck = Object.values(Status);
   const status = statusCheck.includes(searchParams.status)

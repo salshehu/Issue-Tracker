@@ -7,12 +7,19 @@ import Devtabs from "./Devtabs";
 import Link from "next/link";
 import DevChart from "../_components/DevChart";
 import IssueSummary from "@/app/dashboard/IssueSummary";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
+import { redirect } from "next/navigation";
 
 interface Props {
   params: { id: string };
 }
 
 const page = async ({ params }: Props) => {
+  // validate session
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
+
   const dev = await prisma.developers.findUnique({ where: { Id: params.id } });
   const open = await prisma.issue.count({
     where: { devId: params.id, status: "OPEN" },

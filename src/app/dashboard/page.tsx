@@ -6,8 +6,15 @@ import IssueChart from "./IssueChart";
 import { Button, Flex, Grid } from "@radix-ui/themes";
 import IssueStatusPie from "./IssueStatusPie";
 import { Spinner } from "@/_components";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/_lib/authOptions";
+import { redirect } from "next/navigation";
 
 const Dashboard = async () => {
+  // validate session
+  const session = await getServerSession(authOptions);
+  if (!session) redirect("/login");
+
   const open = await prisma.issue.count({ where: { status: "OPEN" } });
   const inProgress = await prisma.issue.count({
     where: { status: "IN_PROGRESS" },

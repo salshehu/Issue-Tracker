@@ -3,7 +3,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="items-center content-between text-sm">
+    <footer className="items-center content-between text-sm align-bottom">
       <span>
         <span>&copy;</span>
         <Link href="/" className="text-violet-600 ml-1 mr-5">
