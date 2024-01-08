@@ -9,6 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { Metadata } from "next";
 
 type formSchema = z.infer<typeof RegisterFormSchema>;
 

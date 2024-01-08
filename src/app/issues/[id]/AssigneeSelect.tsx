@@ -1,11 +1,9 @@
 "use client";
-import { Skeleton, Spinner } from "@/_components";
+import { Spinner } from "@/_components";
 import { Developers } from "@prisma/client";
 import { Heading, Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 const AssigneeSelect = ({ id }: { id: number }) => {
   const { data: devs, error, isLoading } = useFetchDev();

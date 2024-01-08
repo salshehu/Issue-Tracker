@@ -1,15 +1,15 @@
-import prisma from "../../../../prisma/client";
-import { Box, Button, Container, Flex, Heading, Text } from "@radix-ui/themes";
-import Image from "next/image";
-import no_avatar from "../../../../public/no_avatar.png";
-import { BsFacebook, BsPen, BsTwitterX } from "react-icons/bs";
-import Devtabs from "./Devtabs";
-import Link from "next/link";
-import DevChart from "../_components/DevChart";
-import IssueSummary from "@/app/dashboard/IssueSummary";
-import { getServerSession } from "next-auth";
 import { authOptions } from "@/_lib/authOptions";
+import IssueSummary from "@/app/dashboard/IssueSummary";
+import { Box, Container, Flex, Heading, Text } from "@radix-ui/themes";
+import { getServerSession } from "next-auth";
+import Image from "next/image";
 import { redirect } from "next/navigation";
+import { cache } from "react";
+import { BsFacebook, BsTwitterX } from "react-icons/bs";
+import prisma from "../../../../prisma/client";
+import no_avatar from "../../../../public/no_avatar.png";
+import DevChart from "../_components/DevChart";
+import Devtabs from "./Devtabs";
 
 interface Props {
   params: { id: string };
@@ -77,5 +77,17 @@ const page = async ({ params }: Props) => {
     </Container>
   );
 };
+
+export async function generateMetadata({ params }: Props) {
+  const data = await getDev(params.id);
+  return {
+    title: `Viewing ${data?.userName}`,
+    description: `${data?.firstName} Profile page`,
+  };
+}
+
+const getDev = cache((id: string) =>
+  prisma.developers.findUnique({ where: { Id: id } })
+);
 
 export default page;

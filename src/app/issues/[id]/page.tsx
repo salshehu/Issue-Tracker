@@ -7,30 +7,10 @@ import EditIssueBtn from "../_components/EditIssueBtn";
 import ReactMarkdown from "react-markdown";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/_lib/authOptions";
+import { cache } from "react";
 
 interface Props {
   params: { id: string };
-}
-
-async function getIssue({ id }: { id: string }) {
-  try {
-    const issue = await prisma.issue.findUnique({
-      where: { Id: parseInt(id) },
-    });
-
-    if (!issue) throw new Error();
-    return issue;
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export async function generateMetadata({ params }: Props) {
-  const mdata = await getIssue(params);
-  return {
-    title: mdata?.title,
-    description: mdata?.description,
-  };
 }
 
 const IssueDetailsPage = async ({ params }: Props) => {
@@ -79,5 +59,26 @@ const IssueDetailsPage = async ({ params }: Props) => {
     </Grid>
   );
 };
+
+const getIssue = cache(async ({ id }: { id: string }) => {
+  try {
+    const issue = await prisma.issue.findUnique({
+      where: { Id: parseInt(id) },
+    });
+
+    if (!issue) throw new Error();
+    return issue;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+export async function generateMetadata({ params }: Props) {
+  const mdata = await getIssue(params);
+  return {
+    title: mdata?.title,
+    description: mdata?.description,
+  };
+}
 
 export default IssueDetailsPage;

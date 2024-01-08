@@ -1,7 +1,11 @@
-import React from "react";
+import Skeleton from "react-loading-skeleton";
 
 const loading = () => {
-  return <div>loading.....</div>;
+  return (
+    <div>
+      <Skeleton />
+    </div>
+  );
 };
 
 export default loading;

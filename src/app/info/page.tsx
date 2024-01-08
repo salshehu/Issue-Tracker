@@ -1,6 +1,12 @@
 import Image from "next/image";
 import imgPic from "@/../../public/catheringe.webp";
 import { Container, Heading } from "@radix-ui/themes";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Symbiotic",
+  description: "A concise description of Symbiotic Inc.",
+};
 
 const AboutPage = () => {
   return (

@@ -25,9 +25,7 @@ async function getUser(email: string): Promise<User | undefined> {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   providers: [
-    // @ts-ignore
     // OAuth authentication providers...
     // GitHubProvider({
     //   clientId: process.env.GITHUB_ID!,
@@ -82,22 +80,25 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ profile, account }) {
-      if (profile) {
-        const user = await prisma.user.findUnique({
-          where: { email: profile?.email },
-        });
+      if (!profile) return true;
 
-        if (!user)
-          await prisma.user.create({
-            data: {
-              email: profile?.email,
-              name: profile?.name,
-              image: profile?.image,
-            },
-          });
-      }
+      const user = await prisma.user.findUnique({
+        where: { email: profile?.email },
+      });
+
+      if (!user)
+        await prisma.user.create({
+          data: {
+            email: profile?.email,
+            name: profile?.name,
+            image: profile?.image,
+          },
+        });
 
       return true;
     },
   },
+  // adapter: PrismaAdapter(prisma),
 };
+
+/*** // @ts-ignore ***/

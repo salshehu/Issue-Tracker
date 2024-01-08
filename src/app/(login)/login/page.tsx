@@ -1,5 +1,6 @@
 "use client";
 import { Button, Text } from "@radix-ui/themes";
+import { Metadata } from "next";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";

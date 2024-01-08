@@ -18,6 +18,7 @@ import { BsArrowUp } from "react-icons/bs";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/_lib/authOptions";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: {
@@ -120,6 +121,11 @@ const page = async ({ searchParams }: Props) => {
       />
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: "Developers",
+  description: "Listing of all available developers",
 };
 
 export default page;

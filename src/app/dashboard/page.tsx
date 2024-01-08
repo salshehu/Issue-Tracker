@@ -9,6 +9,12 @@ import { Spinner } from "@/_components";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/_lib/authOptions";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "View bug issues at a glance",
+};
 
 const Dashboard = async () => {
   // validate session

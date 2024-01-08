@@ -22,6 +22,7 @@ import { equal } from "assert";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/_lib/authOptions";
 import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: {
@@ -194,7 +195,7 @@ const Issues = async ({ searchParams }: Props) => {
                     )}
                   </TableCell>
                   <TableCell className="flex gap-2 items-center p-1">
-                    <Link href={`/issues/edit/${issue.Id}`}>
+                    <Link href={`/issues/new/${issue.Id}`}>
                       <EditIssueBtn />
                     </Link>
                     <DeleteIssueBtn id={issue.Id} />
@@ -214,6 +215,11 @@ const Issues = async ({ searchParams }: Props) => {
       )}
     </div>
   );
+};
+
+export const metadata: Metadata = {
+  title: "Lists of Issues",
+  description: "A comprehensive list of all reported bug cases",
 };
 
 export default Issues;
