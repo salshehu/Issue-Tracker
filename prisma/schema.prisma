@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["postgresqlExtensions", "views", "fullTextSearch"]
+  previewFeatures = ["fullTextSearch", "postgresqlExtensions", "views"]
 }
 
 datasource db {
@@ -104,6 +104,7 @@ view IssueView {
   Id            Int       @id
   title         String    @db.VarChar(255)
   status        Status
+  description   String?
   dateCompleted DateTime?
   createdAt     DateTime
   userName      String?

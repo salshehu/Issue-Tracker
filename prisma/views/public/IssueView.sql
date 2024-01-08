@@ -2,9 +2,9 @@ SELECT
   i."Id",
   i.title,
   i.status,
+  i.description,
   i."dateCompleted",
   i."createdAt",
-  i."description",
   d."userName"
 FROM
   (
