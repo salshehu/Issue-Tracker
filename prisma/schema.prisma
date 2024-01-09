@@ -4,20 +4,21 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [uuid_ossp(map: "uuid-ossp", schema: "extensions")]
 }
 
 model Issue {
-  Id            Int         @id @default(autoincrement())
+  Id            BigInt      @id @default(autoincrement())
   devId         String?
-  title         String      @db.VarChar(255)
+  title         String
   description   String
   status        Status      @default(OPEN)
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  dateCompleted DateTime?
-  debugging     Debugging?
+  createdAt     DateTime    @default(now()) @db.Timestamptz(6)
+  updatedAt     DateTime    @updatedAt @db.Timestamptz(6)
+  dateCompleted DateTime?   @db.Timestamptz(6)
+  
   devs          Developers? @relation(fields: [devId], references: [Id])
 }
 
@@ -30,22 +31,11 @@ model Developers {
   profilePic String?
   address    String?
   email      String     @unique
-  debugging  Debugging?
+  
   issues     Issue[]
 }
 
-model Debugging {
-  issueId      Int        @unique
-  devId        String     @unique
-  completeRate Float
-  completed    Boolean    @default(false)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  dev          Developers @relation(fields: [devId], references: [Id])
-  issue        Issue      @relation(fields: [issueId], references: [Id])
 
-  @@id([issueId, devId])
-}
 
 model Account {
   id                 String    @id @default(cuid())
@@ -55,9 +45,9 @@ model Account {
   providerAccountId  String
   refreshToken       String?
   accessToken        String?
-  accessTokenExpires DateTime?
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
+  accessTokenExpires DateTime? @db.Timestamptz(6)
+  createdAt          DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt          DateTime  @updatedAt @db.Timestamptz(6)
   user               User      @relation(fields: [userId], references: [id])
 
   @@unique([providerId, providerAccountId])
@@ -66,11 +56,11 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   userId       String
-  expires      DateTime
+  expires      DateTime @db.Timestamptz(6)
   sessionToken String   @unique
   accessToken  String   @unique
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt    DateTime @updatedAt @db.Timestamptz(6)
   user         User     @relation(fields: [userId], references: [id])
 }
 
@@ -80,11 +70,11 @@ model User {
   organisation   String?
   country        String?
   email          String?   @unique
-  emailVerified  DateTime?
+  emailVerified  DateTime? @db.Timestamptz(6)
   hashedPassword String?
   image          String?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime  @default(now()) @db.Timestamptz(6)
+  updatedAt      DateTime  @updatedAt @db.Timestamptz(6)
   accounts       Account[]
   sessions       Session[]
 }
@@ -93,20 +83,20 @@ model VerificationRequest {
   id         String   @id @default(cuid())
   identifier String
   token      String   @unique
-  expires    DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  expires    DateTime @db.Timestamptz(6)
+  createdAt  DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @db.Timestamptz(6)
 
   @@unique([identifier, token])
 }
 
 view IssueView {
-  Id            Int       @id
-  title         String    @db.VarChar(255)
+  Id            BigInt    @id
+  title         String
   status        Status
   description   String?
-  dateCompleted DateTime?
-  createdAt     DateTime
+  dateCompleted DateTime? @db.Timestamptz(6)
+  createdAt     DateTime  @db.Timestamptz(6)
   userName      String?
 }
 

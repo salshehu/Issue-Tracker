@@ -6,45 +6,51 @@ const seedDevDb = async () => {
     data: [
       {
         userName: "Kofi_ganyp",
-        firstName: "Kofi",
-        lastName: "Ganyo",
-        email: "kganyo@ymail.com",
-        profilePic: "",
+        firstName: "Kathrine",
+        lastName: "Bagshaw",
+        email: "kshaw@ymail.com",
+        profilePic:
+          "https://res.cloudinary.com/dte7mqimb/image/upload/v1704508248/Issue_Tracker/yolw5mhpvc2v1ci0ci1a.jpg",
       },
       {
         userName: "g_kingsley",
         firstName: "George",
         lastName: "Kingsley",
         email: "kings@bmail.com",
-        profilePic: "",
+        profilePic:
+          "https://res.cloudinary.com/dte7mqimb/image/upload/v1704508311/Issue_Tracker/umnfvligpxdnrkfzgt43.jpg",
       },
       {
         userName: "roverman",
-        firstName: "Danier",
+        firstName: "Daniella",
         lastName: "Roger",
         email: "drover@ymail.com",
-        profilePic: "",
+        profilePic:
+          "https://res.cloudinary.com/dte7mqimb/image/upload/v1704506924/Issue_Tracker/aplbpneiminyfju9cw38.jpg",
       },
       {
         userName: "cadigan",
         firstName: "Cathering",
         lastName: "Nzema",
         email: "cath@lmail.com",
-        profilePic: "",
+        profilePic:
+          "https://res.cloudinary.com/dte7mqimb/image/upload/v1704508440/Issue_Tracker/nzkb9aollda0jcbfmrhj.jpg",
       },
       {
         userName: "kjb",
         firstName: "Kojo",
         lastName: "Larbi",
         email: "klarb@ymail.com",
-        profilePic: "",
+        profilePic:
+          "https://res.cloudinary.com/dte7mqimb/image/upload/v1704332550/samples/man-portrait.jpg",
       },
       {
         userName: "mansoor",
         firstName: "Zihad",
         lastName: "Mansoorudeen",
         email: "ziman@ymail.com",
-        profilePic: "",
+        profilePic:
+          "https://res.cloudinary.com/dte7mqimb/image/upload/v1704508749/Issue_Tracker/rvno3odumx0jiqc0r9nj.jpg",
       },
     ],
   });
