@@ -81,7 +81,7 @@ const Issues = async ({ searchParams }: Props) => {
 
   // set-up pagination
   const page = +searchParams.page || 1;
-  const pageSize: number = 7;
+  const pageSize: number = 10;
 
   //call to prisma to fetch data
   // const entries = await prisma.developers.findMany({
@@ -115,6 +115,9 @@ const Issues = async ({ searchParams }: Props) => {
           OR: [
             {
               title: {
+                search: searchParams.q,
+              },
+              description: {
                 search: searchParams.q,
               },
             },

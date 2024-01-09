@@ -4,7 +4,7 @@ import Spinner from "@/_components/Spinner";
 import { IssueSchema } from "@/_lib/schemaValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Developers, Issue, Status } from "@prisma/client";
-import { Button, Select, TextField } from "@radix-ui/themes";
+import { Button, Container, Flex, Select, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import SimpleMde from "react-simplemde-editor";
 import { useRouter } from "next/navigation";
@@ -14,6 +14,7 @@ import { z } from "zod";
 import DeleteIssueBtn from "../[id]/DeleteIssueBtn";
 import toast, { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
+import CancelBtn from "@/_components/CancelBtn";
 
 // dynamic fn to laxy load component giving error by disabling SSR on the comp.
 // const SimpleMde = dynamic(() => import("react-simplemde-editor"), {
@@ -107,72 +108,76 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const developer = devs?.find((dev) => dev.Id === issue?.devId);
 
   return (
-    <form className="max-w-2xl p-5 space-y-3" onSubmit={submitForm}>
-      <TextField.Root>
-        <TextField.Input
-          defaultValue={issue?.title}
-          placeholder="Title..."
-          {...register("title")}
-        />
-      </TextField.Root>
-      <ErrorMessage>{errors.title?.message}</ErrorMessage>
-      <Controller
-        name="description"
-        control={control}
-        defaultValue={issue?.description}
-        render={({ field }) => (
-          <SimpleMde placeholder="Description..." {...field} />
-        )}
-      />
-
-      <ErrorMessage>{errors.description?.message}</ErrorMessage>
-
-      <div className="flex gap-2 justify-around">
-        <>
-          <select {...register("status")} placeholder="Status">
-            <option defaultValue={issue?.status || "OPEN"}>
-              {issue?.status || "Set Status.."}
-            </option>
-            {status?.map((st) => (
-              <option key={st} value={st}>
-                {st}
-              </option>
-            ))}
-          </select>
-
-          <ErrorMessage>{errors.status?.message}</ErrorMessage>
-        </>
-        <>
-          <select {...register("devId")}>
-            <option value={developer?.Id || undefined}>
-              {developer?.userName || "Assign Issue..."}
-            </option>
-            {devs?.map((dev) => (
-              <option key={dev.Id} value={dev.Id}>
-                {dev.userName}
-              </option>
-            ))}
-          </select>
-
-          <ErrorMessage>{errors.devId?.message}</ErrorMessage>
-        </>
-      </div>
-
-      <div className="mt-3 flex items-end justify-end gap-2">
-        <Button disabled={isSending}>
-          {isSending ? (
-            <Spinner text={issue ? "Updating..." : "Submitting..."} />
-          ) : issue ? (
-            "Update Issue"
-          ) : (
-            "Submit Issue"
+    <Container className="max-w-2xl">
+      <form className=" p-5 space-y-3" onSubmit={submitForm}>
+        <Flex justify={"end"}>
+          <Button disabled={isSending}>
+            {isSending ? (
+              <Spinner text={issue ? "Updating..." : "Submitting..."} />
+            ) : issue ? (
+              "Update Issue"
+            ) : (
+              "Submit Issue"
+            )}
+          </Button>
+        </Flex>
+        <TextField.Root>
+          <TextField.Input
+            defaultValue={issue?.title}
+            placeholder="Title..."
+            {...register("title")}
+          />
+        </TextField.Root>
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
+        <Controller
+          name="description"
+          control={control}
+          defaultValue={issue?.description}
+          render={({ field }) => (
+            <SimpleMde placeholder="Description..." {...field} />
           )}
-        </Button>
+        />
+
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
+
+        <div className="flex gap-2 justify-around">
+          <>
+            <select {...register("status")} placeholder="Status">
+              <option defaultValue={issue?.status || "OPEN"}>
+                {issue?.status || "Set Status.."}
+              </option>
+              {status?.map((st) => (
+                <option key={st} value={st}>
+                  {st}
+                </option>
+              ))}
+            </select>
+
+            <ErrorMessage>{errors.status?.message}</ErrorMessage>
+          </>
+          <>
+            <select {...register("devId")}>
+              <option value={developer?.Id || undefined}>
+                {developer?.userName || "Assign Issue..."}
+              </option>
+              {devs?.map((dev) => (
+                <option key={dev.Id} value={dev.Id}>
+                  {dev.userName}
+                </option>
+              ))}
+            </select>
+
+            <ErrorMessage>{errors.devId?.message}</ErrorMessage>
+          </>
+        </div>
+
+        <Toaster />
+      </form>
+      <div className="mt-10 flex items-end justify-end gap-2">
         <DeleteIssueBtn id={issue?.Id!} />
-        <Button onClick={() => route.back()}>Cancel</Button>
+        <CancelBtn />
       </div>
-      <Toaster />
-    </form>
+    </Container>
   );
 };
 

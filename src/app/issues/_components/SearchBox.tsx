@@ -13,7 +13,7 @@ const SearchBox = () => {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
 
-  const handleSearch = useDebouncedCallback(() => {
+  const searchText = () => {
     const qry = qref.current?.value;
     if (qry) {
       qry.length > 2 && params.set("q", qry);
@@ -21,7 +21,11 @@ const SearchBox = () => {
       params.delete("q");
     }
     replace(`${path}?${params}`);
-  }, 350);
+  };
+
+  const handleSearch = useDebouncedCallback(() => {
+    searchText();
+  }, 400);
 
   return (
     <Flex align={"center"} gap={"1"}>
@@ -33,7 +37,7 @@ const SearchBox = () => {
         ref={qref}
         onChange={handleSearch}
       />
-      <Button onClick={() => handleSearch()}>
+      <Button onClick={() => searchText()}>
         <BsSearch />
       </Button>
     </Flex>

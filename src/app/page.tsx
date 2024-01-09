@@ -5,6 +5,7 @@ import {
   Container,
   Flex,
   Quote,
+  Blockquote,
 } from "@radix-ui/themes";
 import { Metadata } from "next";
 import Image from "next/image";
@@ -42,13 +43,16 @@ export default function Home() {
             and fast React applications.
           </h4>
           <Text>
-            Prisma is an open source next-generation ORM <br /> Prisma Client is
-            an auto-generated, type-safe query builder generated based on the
-            models and attributes of your Prisma schema. It facilitates how to
-            perform CRUD operations with your generated Prisma Client API. CRUD
-            is an acronym that stands for: Create; Read; Update; Delete.Prisma
-            ORM is a a Node.js and TypeScript ORM with an intuitive data model,
-            automated migrations, type-safety, and auto-completion.
+            <span className=" font-medium">
+              Prisma is an open source next-generation ORM
+            </span>{" "}
+            <br /> Prisma Client is an auto-generated, type-safe query builder
+            generated based on the models and attributes of your Prisma schema.
+            It facilitates how to perform CRUD operations with your generated
+            Prisma Client API. CRUD is an acronym that stands for: Create; Read;
+            Update; Delete.Prisma ORM is a a Node.js and TypeScript ORM with an
+            intuitive data model, automated migrations, type-safety, and
+            auto-completion.
             <Link href="https://www.prisma.io">Learn</Link> about the concepts
             for building your data model with Prisma: Models, scalar types,
             enums, attributes, functions, IDs, default values and more...
@@ -74,6 +78,22 @@ export default function Home() {
             src={hero}
             quality={75}
           />
+          <div className="my-5">
+            Supabase provides a full Postgres database for every project with
+            Realtime functionality, database backups, extensions and more.
+            <br />
+            Every Supabase project comes with a full Postgres database, a free
+            and open source database which is considered one of the world&apos;s
+            most stable and advanced databases.
+            <Blockquote>
+              supabase is just 🤯 Now I see why a lot of people love using it as
+              a backend for their applications. I am really impressed with how
+              easy it is to set up an Auth and then just code it together for
+              the frontend. @IngoKpp now I see your joy with Supabase #coding
+              #fullstackwebdev
+            </Blockquote>
+            <small> -- @IxoyeDesign</small>
+          </div>
         </div>
         <div>
           TypeScript is JavaScript with added syntax for types. What is
@@ -92,8 +112,8 @@ export default function Home() {
             developed using JavaScript, runs via Node.js, and installs with
             environment package managers like npm or yarn. Tailwind CSS makes it
             quicker to write and maintain the code of your application. By using
-            this utility-first framework, you don't have to write separate css
-            files.
+            this utility-first framework, you don&apos;t have to write separate
+            css files.
           </Text>
         </div>
         <div className="flex items-center justify-center">

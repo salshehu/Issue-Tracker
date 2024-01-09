@@ -8,6 +8,8 @@ import ReactMarkdown from "react-markdown";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/_lib/authOptions";
 import { cache } from "react";
+import MarkComplete from "./MarkComplete";
+import Link from "next/link";
 
 interface Props {
   params: { id: string };
@@ -36,22 +38,27 @@ const IssueDetailsPage = async ({ params }: Props) => {
 
           <small>{issue.createdAt.toDateString()}</small>
           <div className=" space-x-2 my-3">
-            <Text as="div" className="mb-7">
-              <ReactMarkdown className=" prose">
-                {issue.description}
-              </ReactMarkdown>
-            </Text>
+            <ReactMarkdown className="mb-5 prose">
+              {issue.description}
+            </ReactMarkdown>
+
+            {issue.dateCompleted && (
+              <Text className="text-sm">
+                Marked completed on {issue.dateCompleted.toDateString()}
+              </Text>
+            )}
           </div>
         </Card>
       </Box>
-      <Box>
+      <Box className="flex justify-between  md:flex-col md:justify-normal">
+        <MarkComplete issue={issue} />
         <Flex
           gap={"3"}
-          className="flex-row justify-end md:flex-col  mx-3 mt-3 "
+          className="flex-row justify-end md:flex-col  mx-3 mt-3  "
         >
-          <LinkComp href={`/issues/edit/${issue.Id}`}>
+          <Link href={`/issues/new/${issue.Id}`}>
             <EditIssueBtn />
-          </LinkComp>
+          </Link>
 
           <DeleteIssueBtn id={issue.Id} />
         </Flex>
